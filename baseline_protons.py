@@ -134,9 +134,9 @@ def main(
     baseline_pb_dir = Path(baseline_pb_dir)
 
     # Fixed path layout expected by the challenge dataset.
-    ct_path        = baseline_pb_dir / modality / split / DIR_IMAGE     / patient_id / CT_NAME
-    plan_json_path = baseline_pb_dir / modality / split / DIR_PLAN_JSON / f"{patient_id}.json"
-    dose_dir       = baseline_pb_dir / modality / split / DIR_DOSE      / patient_id
+    ct_path        = baseline_pb_dir / modality / split / patient_id / DIR_IMAGE / CT_NAME
+    plan_json_path = baseline_pb_dir / modality / split / patient_id / DIR_PLAN_JSON / f"{patient_id}.json"
+    dose_dir       = baseline_pb_dir / modality / split / patient_id / DIR_DOSE
 
     ct = ct_from_file(ct_path)
     logger.info("CT loaded: size=%s  spacing=%s mm", ct.size, ct.resolution)
