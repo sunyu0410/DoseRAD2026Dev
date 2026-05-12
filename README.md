@@ -8,7 +8,7 @@ Reproduces per-control-point (photons) and per-beamlet (protons) dose distributi
 ## Requirements
 
 - Python 3.10+
-- pyRadPlan 0.3.3 (see [Setup](#setup) below)
+- pyRadPlan 0.3.5 (see [Setup](#setup) below)
 - NumPy, SimpleITK, pydantic, Matplotlib (pulled in by pyRadPlan)
 
 ---

@@ -44,15 +44,15 @@ def _compute_cp_dose(
     gantry_angle = float(cp_json["gantry_angle"])
     n_leaf_pairs = int(beam_json["num_mlc_leaf_pairs"])
 
-    # Compared to pyRadPlan's convention, MLC positions seem to be rotated by 180°
-    mlc_left  = -np.flip(np.array(cp_json["mlc_right_int_mm"], dtype=float))
-    mlc_right = -np.flip(np.array(cp_json["mlc_left_int_mm"], dtype=float))
+    # Compared to pyRadPlan's convention, MLC positions seem to be rotated by 180° and shifted by 0.5 mm
+    mlc_left  = -np.flip(np.array(cp_json["mlc_right_int_mm"], dtype=float)) + 0.5
+    mlc_right = -np.flip(np.array(cp_json["mlc_left_int_mm"], dtype=float))+ 0.5
 
     leaf_position_boundaries = np.arange(
         -n_leaf_pairs / 2 * _MLC_LEAF_WIDTH,
          n_leaf_pairs / 2 * _MLC_LEAF_WIDTH,
         _MLC_LEAF_WIDTH,
-    )  # shape (n_leaf_pairs,)
+    ) - 0.5 # shape (n_leaf_pairs,)
 
     mlc = MLC(
         device_orientation="X",
