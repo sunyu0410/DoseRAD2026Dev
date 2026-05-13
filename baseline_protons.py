@@ -243,8 +243,8 @@ def main(
 
 
 if __name__ == "__main__":
-    baseline_dir = "/home/user/doserad2026/baseline_PB"
-    write_dir = "/home/user/doserad2026/baseline_PB"
+    baseline_dir = "K:/doserad2026/baseline_PB"
+    write_dir = "K:/doserad2026/baseline_PB"
     main(
         baseline_pb_dir=baseline_dir,
         output_dir=write_dir,

@@ -46,13 +46,13 @@ def _compute_cp_dose(
 
     # Compared to pyRadPlan's convention, MLC positions seem to be rotated by 180° and shifted by 0.5 mm
     mlc_left  = -np.flip(np.array(cp_json["mlc_right_int_mm"], dtype=float)) + 0.5
-    mlc_right = -np.flip(np.array(cp_json["mlc_left_int_mm"], dtype=float))+ 0.5
+    mlc_right = -np.flip(np.array(cp_json["mlc_left_int_mm"], dtype=float)) + 0.5
 
     leaf_position_boundaries = np.arange(
         -n_leaf_pairs / 2 * _MLC_LEAF_WIDTH,
          n_leaf_pairs / 2 * _MLC_LEAF_WIDTH,
         _MLC_LEAF_WIDTH,
-    ) - 0.5 # shape (n_leaf_pairs,)
+    ) # shape (n_leaf_pairs,)
 
     mlc = MLC(
         device_orientation="X",
@@ -224,8 +224,8 @@ def main(
 
 
 if __name__ == "__main__":
-    baseline_dir = "/home/user/doserad2026/baseline_PB"
-    write_dir = "/home/user/doserad2026/baseline_PB"    
+    baseline_dir = "K:/doserad2026/baseline_PB"
+    write_dir = "K:/doserad2026/baseline_PB"
     main(
         baseline_pb_dir=baseline_dir,
         output_dir=write_dir,

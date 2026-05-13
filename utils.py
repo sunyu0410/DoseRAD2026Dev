@@ -77,15 +77,14 @@ def plot_dose_comparison(
     plot_slice(
         ct=ct, cst=cst, overlay=ref_dose,
         view_slice=view_slice, plane=plane,
-        overlay_unit="Gy", show_plot=False, ax=axes[1],
+        overlay_unit="Gy", show_plot=False, ax=axes[1],        
     )
     axes[1].set_title(f"{ref_title}  slice={view_slice}")
 
     if use_shared_max:
         for ax in axes[:2]:
-            imgs = ax.get_images()
-            if len(imgs) > 1:  # CT background + dose overlay
-                imgs[-1].set_clim(0, shared_max)
+            if ax.collections:  # last collection is the dose overlay pcolormesh
+                ax.collections[-1].set_clim(0, shared_max)
 
     # Difference panel: PB minus MC reference, masked to the dose region.
     diff_slice = pb_arr[sl] - ref_arr[sl]
@@ -94,10 +93,17 @@ def plot_dose_comparison(
 
     plot_slice(ct=ct, cst=cst, view_slice=view_slice, plane=plane,
                show_plot=False, ax=axes[2])
-    im_diff = axes[2].imshow(
-        np.where(dose_mask, diff_slice, np.nan),
-        cmap="RdBu_r", interpolation="nearest",
-        alpha=0.7, vmin=-abs_max, vmax=abs_max,
+    # plot_slice uses pcolormesh with physical coordinates; reuse the corner
+    # coordinate grid it already built so the diff overlay aligns exactly.
+    ct_mesh = axes[2].collections[0]
+    coords = ct_mesh.get_coordinates()  # (ny+1, nx+1, 2) corner coords
+    diff_data = np.where(dose_mask, diff_slice, np.nan)
+    if diff_data.shape != (coords.shape[0] - 1, coords.shape[1] - 1):
+        diff_data = diff_data.T
+    im_diff = axes[2].pcolormesh(
+        coords[..., 0], coords[..., 1], diff_data,
+        cmap="RdBu_r", alpha=0.7, vmin=-abs_max, vmax=abs_max,
+        shading="flat", zorder=2,
     )
     plt.colorbar(im_diff, ax=axes[2], label="Gy")
     axes[2].set_title(f"Difference (PB − MC) slice={view_slice}")
