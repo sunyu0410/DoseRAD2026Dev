@@ -18,7 +18,7 @@ def make_padded_grid(img, pad_voxels):
 
 
 def rotate_image(
-    infile, outfile, isocentre, degree, axis="z", bg_value=-1024, pad_voxels=None
+    infile, isocentre, degree, outfile=None, axis="z", bg_value=-1024, pad_voxels=None
 ):
     image = sitk.ReadImage(infile)
 
@@ -48,18 +48,21 @@ def rotate_image(
 
     rotated_image = resampler.Execute(image)
 
-    sitk.WriteImage(rotated_image, outfile)
+    if outfile is not None:
+        sitk.WriteImage(rotated_image, outfile)
+    else:
+        return rotated_image
 
 
 if __name__ == "__main__":
     rotate_image(
         infile="data/ct.mha",
-        outfile="data/r15p.mha",
         isocentre=[
-            46.8471844842125,
-            -27.777663262437926,
+            -46.8471844842125,
+            27.777663262437926,
             -28.13538836315937,
         ],  # Physical coordinates (x, y, z)
         degree=15,
+        outfile="data/r15p.mha",
         pad_voxels=[50, 50, 50],
     )
