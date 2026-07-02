@@ -44,18 +44,29 @@ def get_source_location_mm(isocentre, gantry_angle_deg, sad_mm=1000.0):
     return source_lps
 
 
+def get_distance_slice_pt(img, slice_idx, pt):
+    nx, ny, nz = img.GetSize()
+    shape_idx = (0, slice_idx, 0), (0, slice_idx, nz - 1), (nx - 1, slice_idx, 0)
+    shape_pts = [img.TransformIndexToPhysicalPoint(i) for i in shape_idx]
+    dist = get_distance_plane_pt(shape_pts, pt)
+    return dist
+
+
 isocentre = np.array([-46.84718448, 27.77766326, -28.13538836])
 print(get_source_location_mm(isocentre, -180))
 print(get_source_location_mm(isocentre, -150))
 print(get_source_location_mm(isocentre, 0))
 
 # Retrieve info
+cp_idx = 23
 beam_info = json.load(open("data/1ABB006.json"))
 beam0 = beam_info["beams"][0]
 
-mlc_left = np.array(beam0["control_points"][0]["mlc_left_int_mm"])
-mlc_right = np.array(beam0["control_points"][0]["mlc_right_int_mm"])
+assert beam0["control_points"][cp_idx]["cp_idx"] == cp_idx
+mlc_left = np.array(beam0["control_points"][cp_idx]["mlc_left_int_mm"])
+mlc_right = np.array(beam0["control_points"][cp_idx]["mlc_right_int_mm"])
 isocentre = np.array(beam0["iso_center"])
+gantry_angle = beam0["control_points"][cp_idx]["gantry_angle"]
 
 # Get the MLC physical positions
 mlc_lf = get_mlc_offsets_mm(mlc_left)
@@ -67,11 +78,14 @@ ct = sitk.ReadImage("data/ct_1mm.mha")
 nx, ny, nz = ct.GetSize()
 ct_arr = sitk.GetArrayFromImage(ct)
 arr = np.zeros(ct_arr.shape, np.uint8)
-dist_iso = 999.77766326
+
+isocentre_idx = ct.TransformPhysicalPointToIndex(isocentre)
+source_mm = get_source_location_mm(isocentre, gantry_angle)
+dist_iso = get_distance_slice_pt(ct, isocentre_idx[1], source_mm)
+
 for i in tqdm(range(ny)):
     shape_idx = (0, i, 0), (0, i, nz - 1), (nx - 1, i, 0)
     shape_pts = [ct.TransformIndexToPhysicalPoint(i) for i in shape_idx]
-    source_mm = get_source_location_mm(isocentre, -180)
     dist = get_distance_plane_pt(shape_pts, source_mm)
     ratio = dist / dist_iso
 
@@ -80,6 +94,12 @@ for i in tqdm(range(ny)):
     intc_shape_idx = np.array(intc_shape_idx)
 
     rr, cc = polygon(intc_shape_idx[:, 0], intc_shape_idx[:, 2], shape=(nz, nx))
+
+    # There could be out of bound idx from polygon
+    # Only keep the in-bound points
+    in_bound = (cc<nz) & (rr<nx)
+    cc, rr = cc[in_bound], rr[in_bound]
+    
     arr[cc, i, rr] = 1
 
 img = sitk.GetImageFromArray(arr)
