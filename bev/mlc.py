@@ -12,10 +12,8 @@ def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
 
     for i, offset in enumerate(mlc_offsets):
         # The number in MLC means moving right
-        # But the mha is LPS
-        # Hence it's -1*offset
-        point_1 = (-offset, (i - n_leafs) * leaf_width)
-        point_2 = (-offset, ((i + 1) - n_leafs) * leaf_width)
+        point_1 = (offset, (i - n_leafs) * leaf_width)
+        point_2 = (offset, ((i + 1) - n_leafs) * leaf_width)
 
         pts_mm.append(point_1)
         pts_mm.append(point_2)
