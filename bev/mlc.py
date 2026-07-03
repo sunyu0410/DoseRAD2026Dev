@@ -51,27 +51,6 @@ def get_mlc_2d_vox(ref_file_path, mlc, fill=1):
     return mlc_voxels
 
 
-def mlc_extrude(ref_file_path, mlc, isocentre, fill=1, outfile=None):
-    ref = sitk.ReadImage(ref_file_path)
-    mlc_idx = np.array(
-        [ref.TransformPhysicalPointToIndex((i[0], isocentre[1], i[1])) for i in mlc]
-    )
-
-    nx, ny, nz = ref.GetSize()
-
-    rr, cc = polygon(mlc_idx[:, 0], mlc_idx[:, 2], shape=(nz, nx))
-    mlc_voxels = np.zeros((nz, ny, nx), dtype=np.uint8)
-    mlc_voxels[cc, :, rr] = fill  # Burn the filled path aperture as 1
-
-    mlc_sitk = sitk.GetImageFromArray(mlc_voxels)
-    mlc_sitk.CopyInformation(ref)
-
-    if outfile is not None:
-        sitk.WriteImage(mlc_sitk, outfile)
-    else:
-        return mlc_sitk
-
-
 if __name__ == "__main__":
 
     # Retrieve info
@@ -87,11 +66,3 @@ if __name__ == "__main__":
     mlc_rt = get_mlc_offsets_mm(mlc_right)
 
     mlc = get_mlc_mm(mlc_lf, mlc_rt, isocentre)
-
-    # Extrude the MLC path on the reference image
-    mlc_extrude(
-        ref_file_path="data/ct_1mm.mha",
-        mlc=mlc,
-        isocentre=isocentre,
-        outfile="data/mlc_extrusion.mha",
-    )

@@ -17,6 +17,19 @@ def make_padded_grid(img, pad_voxels):
     return new_size, new_origin
 
 
+def flat_zeros(img):
+    """
+    For rotating dose images
+    Flat the close to zero values (due to interpolation) to zero
+    This will significant reduce the file size
+    """
+    arr = sitk.GetArrayFromImage(img)
+    arr[np.isclose(arr, 0, atol=1e-7)] = 0
+    out = sitk.GetImageFromArray(arr)
+    out.CopyInformation(img)
+    return out
+
+
 def rotate_image(
     infile, isocentre, degree, outfile=None, axis="z", bg_value=-1024, pad_voxels=None
 ):
@@ -55,14 +68,20 @@ def rotate_image(
 
 
 if __name__ == "__main__":
-    rotate_image(
-        infile="data/ct.mha",
+    img = rotate_image(
+        infile="data/Dose_B0_CP000.mha",
         isocentre=[
             -46.8471844842125,
             27.777663262437926,
             -28.13538836315937,
         ],  # Physical coordinates (x, y, z)
         degree=15,
-        outfile="data/r15p.mha",
+        bg_value=0,
+        # outfile="data/r15p.mha",
         pad_voxels=[50, 50, 50],
     )
+
+    sitk.WriteImage(img, "img1.nii.gz")
+
+    img_flat_zero = flat_zeros(img)
+    sitk.WriteImage(img_flat_zero, "img2.nii.gz")
