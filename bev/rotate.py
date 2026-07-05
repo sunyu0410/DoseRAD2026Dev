@@ -33,14 +33,18 @@ def flat_zeros(img):
 def rotate_image(
     infile, isocentre, degree, outfile=None, axis="z", bg_value=-1024, pad_voxels=None
 ):
+
+    # Based on testing, the degree should be flipped so that
+    #   rotate -gantry_angle will return to BEV position
+    angle = -degree
     image = sitk.ReadImage(infile)
 
     if axis == "x":
-        radians = np.deg2rad(degree), 0.0, 0.0
+        radians = np.deg2rad(angle), 0.0, 0.0
     elif axis == "y":
-        radians = 0.0, np.deg2rad(degree), 0.0
+        radians = 0.0, np.deg2rad(angle), 0.0
     elif axis == "z":
-        radians = 0.0, 0.0, np.deg2rad(degree)
+        radians = 0.0, 0.0, np.deg2rad(angle)
 
     transform = sitk.Euler3DTransform()
     transform.SetCenter(isocentre)

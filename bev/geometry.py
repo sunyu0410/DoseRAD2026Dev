@@ -2,10 +2,41 @@ from sympy.geometry import Point3D, Plane
 import numpy as np
 import SimpleITK as sitk
 import json
-from mlc import get_mlc_offsets_mm, get_mlc_mm
 from tqdm import tqdm
 from skimage.draw import polygon
 from rotate import rotate_image
+
+
+def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
+
+    pts_mm = []
+    n_leafs = len(mlc_offsets) / 2
+
+    for i, offset in enumerate(mlc_offsets):
+        # The number in MLC means moving right
+        point_1 = (offset, (i - n_leafs) * leaf_width)
+        point_2 = (offset, ((i + 1) - n_leafs) * leaf_width)
+
+        pts_mm.append(point_1)
+        pts_mm.append(point_2)
+
+    return pts_mm
+
+
+def get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=False):
+
+    mlc = mlc_lf + mlc_rt[::-1]
+    mlc = np.array(mlc)
+    if in_3d:
+        # Add second col as 0
+        mlc = np.insert(mlc, 1, values=0, axis=1)
+    else:
+        # Remove the second index
+        isocentre = (isocentre[0], isocentre[2])
+
+    mlc += isocentre
+
+    return mlc
 
 
 def get_intercept_points(shape_pts, source_pt, ratio):
@@ -73,16 +104,18 @@ def draw_polygon(arr, slice_idx, shape_idx, fill=1):
 class MLCDrawer:
     """BEV, assuming the gantry is rotated to 0 angle"""
 
-    def __init__(self, ref_img, mlc, isocentre):
+    def __init__(self, ref_img, mlc, isocentre, sad):
         self.ref_img = ref_img
         self.mlc = mlc
         self.isocentre = isocentre
         self.isocentre_idx = self.ref_img.TransformPhysicalPointToIndex(self.isocentre)
-
+        self.sad = sad
         self.angle = 0  # BEV (angle rotated to 0)
+
         self.source_mm = get_source_location_mm(
-            self.isocentre, self.angle
+            self.isocentre, self.angle, self.sad
         )  # source physical location
+
         self.dist_iso = get_distance_slice_pt(
             self.ref_img, self.isocentre_idx[1], self.source_mm
         )  # source slice to isocentre
@@ -106,7 +139,7 @@ class MLCDrawer:
         return ratios
 
     def cal_bev_beam_path(self):
-        
+
         img_arr = sitk.GetArrayFromImage(self.ref_img)
         arr = np.zeros(img_arr.shape, np.uint8)
 
@@ -145,25 +178,21 @@ if __name__ == "__main__":
     mlc_right = np.array(beam0["control_points"][cp_idx]["mlc_right_int_mm"])
     isocentre = np.array(beam0["iso_center"])
     gantry_angle = beam0["control_points"][cp_idx]["gantry_angle"]
+    sad = beam0["SAD"]
 
-    rotate_image(
+    ct_rot = rotate_image(
         infile="data/ct.mha",
         isocentre=isocentre,
-        degree=gantry_angle,
-        outfile=f"data/rotated/ct{gantry_angle}.mha",
+        degree=-gantry_angle,
     )
 
     rotate_image(
         infile=f"data/Dose_B0_CP{cp_idx:03d}.mha",
         isocentre=isocentre,
-        degree=gantry_angle,
+        degree=-gantry_angle,
         outfile=f"data/rotated/d{gantry_angle}.mha",
         bg_value=0,
     )
-
-    # After rotation
-    # Reset gantry angle to 0
-    angle = 0
 
     # Get the MLC physical positions
     mlc_lf = get_mlc_offsets_mm(mlc_left)
@@ -171,10 +200,8 @@ if __name__ == "__main__":
 
     mlc = get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=True)
 
-    # ct = sitk.ReadImage("data/ct_1mm.mha")
-    ct = sitk.ReadImage(f"data/rotated/ct{gantry_angle}.mha")
-
-    drawer = MLCDrawer(ct, mlc, isocentre)
-
+    drawer = MLCDrawer(ct_rot, mlc, isocentre, sad)
     bev = drawer.cal_bev_beam_path()
+
+    sitk.WriteImage(ct_rot, f"data/rotated/ct{gantry_angle}.mha")
     sitk.WriteImage(bev, f"data/rotated/bev{gantry_angle}.nii.gz")
