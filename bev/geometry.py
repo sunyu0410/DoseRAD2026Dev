@@ -5,6 +5,7 @@ import json
 from tqdm import tqdm
 from skimage.draw import polygon
 from rotate import rotate_image
+import cv2
 
 
 def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
@@ -84,18 +85,28 @@ def get_distance_slice_pt(img, slice_idx, pt):
     return dist
 
 
+# # skimage version
+# def draw_polygon(arr, slice_idx, shape_idx, fill=1):
+#     """shape_idx: the 3D indices of the shape"""
+#     nz, ny, nx = arr.shape
+#     rr, cc = polygon(shape_idx[:, 0], shape_idx[:, 2], shape=(nz, nx))
+
+#     # There could be out of bound idx from polygon
+#     # Only keep the in-bound points
+#     in_bound = (cc < nz) & (rr < nx)
+#     cc, rr = cc[in_bound], rr[in_bound]
+
+#     out = arr.copy()
+#     out[cc, slice_idx, rr] = fill
+
+#     return out
+
+
 def draw_polygon(arr, slice_idx, shape_idx, fill=1):
     """shape_idx: the 3D indices of the shape"""
-    nz, ny, nx = arr.shape
-    rr, cc = polygon(shape_idx[:, 0], shape_idx[:, 2], shape=(nz, nx))
-
-    # There could be out of bound idx from polygon
-    # Only keep the in-bound points
-    in_bound = (cc < nz) & (rr < nx)
-    cc, rr = cc[in_bound], rr[in_bound]
-
     out = arr.copy()
-    out[cc, slice_idx, rr] = 1
+    cv2_pts = np.array(shape_idx[:, [0, 2]], dtype=np.int32).reshape((-1, 1, 2))
+    cv2_bev = cv2.fillPoly(out[:, slice_idx, :], [cv2_pts], color=fill)
 
     return out
 
@@ -128,14 +139,12 @@ class MLCDrawer:
 
     def cal_ratios(self):
         """Calcalte the ratios relative to distance(iso_slice, source)"""
-        ratios = []
         nx, ny, nz = self.ref_img.GetSize()
-        for i in tqdm(range(ny)):
-            shape_idx = (0, i, 0), (0, i, nz - 1), (nx - 1, i, 0)
-            shape_pts = self.idx2mm(shape_idx)
-            dist = get_distance_plane_pt(shape_pts, self.source_mm)
-            ratio = dist / self.dist_iso
-            ratios.append(ratio)
+        dist_fist = get_distance_slice_pt(self.ref_img, 0, self.source_mm)
+        dist_last = get_distance_slice_pt(self.ref_img, ny - 1, self.source_mm)
+
+        ratios = np.linspace(dist_fist, dist_last, ny) / self.dist_iso
+
         return ratios
 
     def cal_bev_beam_path(self):

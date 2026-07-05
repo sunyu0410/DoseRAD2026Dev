@@ -24,10 +24,10 @@ class Plan:
     @property
     def isocentre(self):
         return self.beam_info[self.beam_id]["isocentre"]
-    
+
     @property
     def gantry_angle(self):
-        return self.cp[self.beam_id][self.cp_idx]['ga']
+        return self.cp[self.beam_id][self.cp_idx]["ga"]
 
     def parse_json(self):
         # In [113]: beam_info[0]
