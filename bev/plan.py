@@ -99,9 +99,7 @@ class Plan:
 
         img_rot, dose_rot = self.rotate_to_bev(-gantry_angle)
 
-        mlc_lf = get_mlc_offsets_mm(cp["l"])
-        mlc_rt = get_mlc_offsets_mm(cp["r"])
-        mlc = get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=True)
+        mlc = get_mlc_segs_mm(cp["l"], cp["r"], isocentre)
 
         drawer = MLCDrawer(img_rot, mlc, isocentre, sad)
         bev = drawer.cal_bev_beam_path()

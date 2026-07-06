@@ -6,6 +6,7 @@ from tqdm import tqdm
 from skimage.draw import polygon
 from rotate import rotate_image
 import cv2
+from scipy.ndimage import label
 
 
 def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
@@ -21,10 +22,13 @@ def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
         pts_mm.append(point_1)
         pts_mm.append(point_2)
 
-    return pts_mm
+    return np.array(pts_mm)
 
 
 def get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=False):
+
+    mlc_lf = mlc_lf.tolist()
+    mlc_rt = mlc_rt.tolist()
 
     mlc = mlc_lf + mlc_rt[::-1]
     mlc = np.array(mlc)
@@ -38,6 +42,26 @@ def get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=False):
     mlc += isocentre
 
     return mlc
+
+
+def get_mlc_segs_mm(mlc_left, mlc_right, isocentre):
+    # Convert to np array for element-wise comparison
+    mlc_left, mlc_right = np.array(mlc_left), np.array(mlc_right)
+
+    # Get the is_open mask and repeat it (2 pts per MLC leaf)
+    is_open = mlc_left != mlc_right  # 80
+    labels_open, n_labels = label(is_open)
+    labels = np.repeat(labels_open, 2)  # 160
+
+    mlc_lf = get_mlc_offsets_mm(mlc_left)  # (160, 2)
+    mlc_rt = get_mlc_offsets_mm(mlc_right)  # (160, 2)
+
+    segs = [
+        get_mlc_mm(mlc_lf[labels == lab], mlc_rt[labels == lab], isocentre, in_3d=True)
+        for lab in range(1, n_labels + 1)
+    ]
+
+    return segs
 
 
 def get_intercept_points(shape_pts, source_pt, ratio):
@@ -105,8 +129,11 @@ def get_distance_slice_pt(img, slice_idx, pt):
 def draw_polygon(arr, slice_idx, shape_idx, fill=1):
     """shape_idx: the 3D indices of the shape"""
     out = arr.copy()
-    cv2_pts = np.array(shape_idx[:, [0, 2]], dtype=np.int32).reshape((-1, 1, 2))
-    cv2_bev = cv2.fillPoly(out[:, slice_idx, :], [cv2_pts], color=fill)
+    cv2_pts = [
+        np.array(idx[:, [0, 2]], dtype=np.int32).reshape((-1, 1, 2))
+        for idx in shape_idx
+    ]
+    cv2_bev = cv2.fillPoly(out[:, slice_idx, :], cv2_pts, color=fill)
 
     return out
 
@@ -157,13 +184,18 @@ class MLCDrawer:
 
         # Use the ratio to draw polygon on each slice
         for i, ratio in enumerate(ratios):
-            intc_shape_pts = get_intercept_points(
-                self.mlc, self.source_mm, ratio
-            )  # intercepted physical locations
-            intc_shape_idx = np.array(
-                self.mm2idx(intc_shape_pts)
-            )  # intercepted voxel idx
-            arr = draw_polygon(arr, i, intc_shape_idx)  # draw the polygon at slice i
+
+            # Intercepted physical locations for all segments
+            intc_shape_pts = [
+                get_intercept_points(seg, self.source_mm, ratio) for seg in self.mlc
+            ]
+
+            # Intercepted voxel idx for all segments
+            intc_shape_idx = [np.array(self.mm2idx(pts)) for pts in intc_shape_pts]
+
+            # Draw the polygon at slice i
+            # intc_shape_idx is a collections of shape indices
+            arr = draw_polygon(arr, i, intc_shape_idx)
 
         img = sitk.GetImageFromArray(arr)
         img.CopyInformation(self.ref_img)
@@ -204,10 +236,8 @@ if __name__ == "__main__":
     )
 
     # Get the MLC physical positions
-    mlc_lf = get_mlc_offsets_mm(mlc_left)
-    mlc_rt = get_mlc_offsets_mm(mlc_right)
-
-    mlc = get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=True)
+    # [shape 1 (nx3), shape 2 (mx3), ...]
+    mlc = get_mlc_segs_mm(mlc_left, mlc_right, isocentre)
 
     drawer = MLCDrawer(ct_rot, mlc, isocentre, sad)
     bev = drawer.cal_bev_beam_path()
