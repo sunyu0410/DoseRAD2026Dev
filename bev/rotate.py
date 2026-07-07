@@ -30,14 +30,20 @@ def flat_zeros(img):
     return out
 
 
-def rotate_image(
-    infile, isocentre, degree, outfile=None, axis="z", bg_value=-1024, pad_voxels=None
+def rotate_image_sitk(
+    image,
+    isocentre,
+    degree,
+    outfile=None,
+    axis="z",
+    bg_value=-1024,
+    pad_voxels=None,
+    intpl=sitk.sitkBSpline,
 ):
 
     # Based on testing, the degree should be flipped so that
     #   rotate -gantry_angle will return to BEV position
     angle = -degree
-    image = sitk.ReadImage(infile)
 
     if axis == "x":
         radians = np.deg2rad(angle), 0.0, 0.0
@@ -53,7 +59,7 @@ def rotate_image(
     resampler = sitk.ResampleImageFilter()
     resampler.SetReferenceImage(image)
     resampler.SetTransform(transform)
-    resampler.SetInterpolator(sitk.sitkBSpline)
+    resampler.SetInterpolator(intpl)
     resampler.SetDefaultPixelValue(bg_value)
 
     if pad_voxels is not None:
@@ -69,6 +75,22 @@ def rotate_image(
         sitk.WriteImage(rotated_image, outfile)
     else:
         return rotated_image
+
+
+def rotate_image(
+    infile,
+    isocentre,
+    degree,
+    outfile=None,
+    axis="z",
+    bg_value=-1024,
+    pad_voxels=None,
+    intpl=sitk.sitkBSpline,
+):
+    image = sitk.ReadImage(infile)
+    return rotate_image_sitk(
+        image, isocentre, degree, outfile, axis, bg_value, pad_voxels, intpl
+    )
 
 
 if __name__ == "__main__":

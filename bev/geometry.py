@@ -9,61 +9,6 @@ import cv2
 from scipy.ndimage import label
 
 
-def get_mlc_offsets_mm(mlc_offsets, leaf_width=5):
-
-    pts_mm = []
-    n_leafs = len(mlc_offsets) / 2
-
-    for i, offset in enumerate(mlc_offsets):
-        # The number in MLC means moving right
-        point_1 = (offset, (i - n_leafs) * leaf_width)
-        point_2 = (offset, ((i + 1) - n_leafs) * leaf_width)
-
-        pts_mm.append(point_1)
-        pts_mm.append(point_2)
-
-    return np.array(pts_mm)
-
-
-def get_mlc_mm(mlc_lf, mlc_rt, isocentre, in_3d=False):
-
-    mlc_lf = mlc_lf.tolist()
-    mlc_rt = mlc_rt.tolist()
-
-    mlc = mlc_lf + mlc_rt[::-1]
-    mlc = np.array(mlc)
-    if in_3d:
-        # Add second col as 0
-        mlc = np.insert(mlc, 1, values=0, axis=1)
-    else:
-        # Remove the second index
-        isocentre = (isocentre[0], isocentre[2])
-
-    mlc += isocentre
-
-    return mlc
-
-
-def get_mlc_segs_mm(mlc_left, mlc_right, isocentre):
-    # Convert to np array for element-wise comparison
-    mlc_left, mlc_right = np.array(mlc_left), np.array(mlc_right)
-
-    # Get the is_open mask and repeat it (2 pts per MLC leaf)
-    is_open = mlc_left != mlc_right  # 80
-    labels_open, n_labels = label(is_open)
-    labels = np.repeat(labels_open, 2)  # 160
-
-    mlc_lf = get_mlc_offsets_mm(mlc_left)  # (160, 2)
-    mlc_rt = get_mlc_offsets_mm(mlc_right)  # (160, 2)
-
-    segs = [
-        get_mlc_mm(mlc_lf[labels == lab], mlc_rt[labels == lab], isocentre, in_3d=True)
-        for lab in range(1, n_labels + 1)
-    ]
-
-    return segs
-
-
 def get_intercept_points(shape_pts, source_pt, ratio):
     """The ratio is the Distance(plane, source) / Distance(reference shape, source)"""
     return source_pt + ratio * (shape_pts - source_pt)
@@ -136,6 +81,75 @@ def draw_polygon(arr, slice_idx, shape_idx, fill=1):
     cv2_bev = cv2.fillPoly(out[:, slice_idx, :], cv2_pts, color=fill)
 
     return out
+
+
+class MLC:
+    """A group of functions to calculate the physical coordinates of
+    each shape in the MLC
+    """
+
+    def get_mlc_2d_offsets_mm(mlc_offsets, leaf_width=5):
+        """Convert the raw MLC leaf offsets to physical offsets
+        relative to the isocentre.
+        Given 80 leafs, and each is 5mm, the span is 400 mm.
+        """
+
+        pts_mm = []
+        n_leafs = len(mlc_offsets) / 2
+
+        for i, offset in enumerate(mlc_offsets):
+            # The number in MLC means moving right
+            point_1 = (offset, (i - n_leafs) * leaf_width)
+            point_2 = (offset, ((i + 1) - n_leafs) * leaf_width)
+
+            pts_mm.append(point_1)
+            pts_mm.append(point_2)
+
+        return np.array(pts_mm)
+
+    def combine_mlc_offsets(mlc_lf, mlc_rt, isocentre, in_3d=False):
+        """Combine the absoltue left and right MLC physical offsets
+        If in_3d, it will return 3D coords, otherwise 2D coords along BEV
+        """
+
+        mlc_lf = mlc_lf.tolist()
+        mlc_rt = mlc_rt.tolist()
+
+        mlc = mlc_lf + mlc_rt[::-1]
+        mlc = np.array(mlc)
+        if in_3d:
+            # Add second col as 0
+            mlc = np.insert(mlc, 1, values=0, axis=1)
+        else:
+            # Remove the second index
+            isocentre = (isocentre[0], isocentre[2])
+
+        mlc += isocentre
+
+        return mlc
+
+    def get_mlc_segs_mm(mlc_left, mlc_right, isocentre):
+        """End-to-end from raw MLC data to each isolated shape from MLC"""
+
+        # Convert to np array for element-wise comparison
+        mlc_left, mlc_right = np.array(mlc_left), np.array(mlc_right)
+
+        # Get the is_open mask and repeat it (2 pts per MLC leaf)
+        is_open = mlc_left != mlc_right  # 80
+        labels_open, n_labels = label(is_open)
+        labels = np.repeat(labels_open, 2)  # 160
+
+        mlc_lf = MLC.get_mlc_2d_offsets_mm(mlc_left)  # (160, 2)
+        mlc_rt = MLC.get_mlc_2d_offsets_mm(mlc_right)  # (160, 2)
+
+        segs = [
+            MLC.combine_mlc_offsets(
+                mlc_lf[labels == lab], mlc_rt[labels == lab], isocentre, in_3d=True
+            )
+            for lab in range(1, n_labels + 1)
+        ]
+
+        return segs
 
 
 # For each CP
@@ -237,7 +251,7 @@ if __name__ == "__main__":
 
     # Get the MLC physical positions
     # [shape 1 (nx3), shape 2 (mx3), ...]
-    mlc = get_mlc_segs_mm(mlc_left, mlc_right, isocentre)
+    mlc = MLC.get_mlc_segs_mm(mlc_left, mlc_right, isocentre)
 
     drawer = MLCDrawer(ct_rot, mlc, isocentre, sad)
     bev = drawer.cal_bev_beam_path()

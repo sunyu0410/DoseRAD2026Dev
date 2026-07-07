@@ -3,9 +3,10 @@ import SimpleITK as sitk
 from pathlib import Path
 import json
 from collections import OrderedDict as odict
-from rotate import rotate_image
+from rotate import rotate_image, rotate_image_sitk
 from geometry import *
 import matplotlib.pyplot as plt
+from ct import get_body_mask
 
 
 class Plan:
@@ -15,6 +16,7 @@ class Plan:
         self.dose_dir = Path(dose_dir)
 
         self.img = sitk.ReadImage(img_file_path)
+        self.body_mask = get_body_mask(self.img, thres=-1024)
         self.info = json.load(open(info_json_path))
 
         self.parse_json()
@@ -87,7 +89,16 @@ class Plan:
             bg_value=0,
         )
 
-        return img_rot, dose_rot
+        mask_rot = rotate_image_sitk(
+            image=self.body_mask,
+            isocentre=self.isocentre,
+            degree=angle,
+            # outfile=f"data/rotated/d{gantry_angle}.mha",
+            bg_value=0,
+            intpl=sitk.sitkNearestNeighbor,
+        )
+
+        return img_rot, dose_rot, mask_rot
 
     def generate_view(self):
         beam = self.beam_info[self.beam_id]
@@ -97,14 +108,14 @@ class Plan:
         isocentre = beam["isocentre"]
         gantry_angle = cp["ga"]
 
-        img_rot, dose_rot = self.rotate_to_bev(-gantry_angle)
+        img_rot, dose_rot, mask_rot = self.rotate_to_bev(-gantry_angle)
 
-        mlc = get_mlc_segs_mm(cp["l"], cp["r"], isocentre)
+        mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], isocentre)
 
         drawer = MLCDrawer(img_rot, mlc, isocentre, sad)
         bev = drawer.cal_bev_beam_path()
 
-        return img_rot, dose_rot, bev
+        return img_rot, dose_rot, bev, mask_rot
 
 
 if __name__ == "__main__":
@@ -120,12 +131,13 @@ if __name__ == "__main__":
 
     beam_id, cp_idx = 0, 23
     plan.set_state(beam_id=beam_id, cp_idx=cp_idx)
-    img_rot, dose_rot, bev = plan.generate_view()
+    img_rot, dose_rot, bev, body_mask = plan.generate_view()
     gantry_angle = plan.gantry_angle
 
     sitk.WriteImage(img_rot, f"data/rotated/ct{gantry_angle}.mha")
     sitk.WriteImage(dose_rot, f"data/rotated/dose{gantry_angle}.mha")
     sitk.WriteImage(bev, f"data/rotated/bev{gantry_angle}.nii.gz")
+    sitk.WriteImage(body_mask, f"data/rotated/body_mask{gantry_angle}.nii.gz")
 
     a = sitk.GetArrayFromImage(img_rot)
     b = sitk.GetArrayFromImage(dose_rot)
