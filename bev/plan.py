@@ -73,49 +73,48 @@ class Plan:
         self.beam_id = beam_id
         self.cp_idx = cp_idx
 
-    def rotate_to_bev(self, angle):
-        img_rot = rotate_image(
+        self.rotate_to_bev()
+
+    def rotate_to_bev(self):
+
+        beam = self.beam_info[self.beam_id]
+        cp = self.cp[self.beam_id][self.cp_idx]
+
+        self.sad = beam["sad"]
+        isocentre = self.isocentre
+        gantry_angle = self.gantry_angle
+
+        # Rotate images and store them as self attributes
+        angle = -self.gantry_angle  # Reverse the gantry angle
+
+        self.img_rot = rotate_image(
             infile=self.img_file_path,
-            isocentre=self.isocentre,
+            isocentre=isocentre,
             degree=angle,
-            # outfile=f"data/rotated/ct{gantry_angle}.mha",
         )
 
-        dose_rot = rotate_image(
+        self.dose_rot = rotate_image(
             infile=str(self.dose_dir / f"Dose_B{self.beam_id}_CP{self.cp_idx:03d}.mha"),
-            isocentre=self.isocentre,
+            isocentre=isocentre,
             degree=angle,
-            # outfile=f"data/rotated/d{gantry_angle}.mha",
             bg_value=0,
         )
 
-        mask_rot = rotate_image_sitk(
+        # Rotate an existing sitk image, not from file, hence using rotate_image_sitk
+        self.mask_rot = rotate_image_sitk(
             image=self.body_mask,
-            isocentre=self.isocentre,
+            isocentre=isocentre,
             degree=angle,
-            # outfile=f"data/rotated/d{gantry_angle}.mha",
             bg_value=0,
             intpl=sitk.sitkNearestNeighbor,
         )
 
-        return img_rot, dose_rot, mask_rot
+        # Get the BEV
+        self.mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], self.isocentre)
+        drawer = MLCDrawer(self.img_rot, self.mlc, self.isocentre, self.sad)
+        self.bev = drawer.cal_bev_beam_path()
 
-    def generate_view(self):
-        beam = self.beam_info[self.beam_id]
-        cp = self.cp[self.beam_id][self.cp_idx]
-
-        sad = beam["sad"]
-        isocentre = beam["isocentre"]
-        gantry_angle = cp["ga"]
-
-        img_rot, dose_rot, mask_rot = self.rotate_to_bev(-gantry_angle)
-
-        mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], isocentre)
-
-        drawer = MLCDrawer(img_rot, mlc, isocentre, sad)
-        bev = drawer.cal_bev_beam_path()
-
-        return img_rot, dose_rot, bev, mask_rot
+        # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
 
 
 if __name__ == "__main__":
@@ -131,21 +130,23 @@ if __name__ == "__main__":
 
     beam_id, cp_idx = 0, 23
     plan.set_state(beam_id=beam_id, cp_idx=cp_idx)
-    img_rot, dose_rot, bev, body_mask = plan.generate_view()
-    gantry_angle = plan.gantry_angle
 
-    sitk.WriteImage(img_rot, f"data/rotated/ct{gantry_angle}.mha")
-    sitk.WriteImage(dose_rot, f"data/rotated/dose{gantry_angle}.mha")
-    sitk.WriteImage(bev, f"data/rotated/bev{gantry_angle}.nii.gz")
-    sitk.WriteImage(body_mask, f"data/rotated/body_mask{gantry_angle}.nii.gz")
+    ga = plan.gantry_angle
 
-    a = sitk.GetArrayFromImage(img_rot)
-    b = sitk.GetArrayFromImage(dose_rot)
-    c = sitk.GetArrayFromImage(bev)
+    sitk.WriteImage(plan.img_rot, f"data/rotated/ct{ga}.mha")
+    sitk.WriteImage(plan.dose_rot, f"data/rotated/dose{ga}.mha")
+    sitk.WriteImage(plan.mask_rot, f"data/rotated/body_mask{ga}.nii.gz")
+    sitk.WriteImage(plan.bev, f"data/rotated/bev{ga}.nii.gz")
+
+    a = sitk.GetArrayFromImage(plan.img_rot)
+    b = sitk.GetArrayFromImage(plan.dose_rot)
+    c = sitk.GetArrayFromImage(plan.mask_rot)
+    d = sitk.GetArrayFromImage(plan.bev)
 
     plt.imshow(a[102], alpha=0.4, cmap="gray")
     plt.imshow(b[102], alpha=0.4)
-    plt.imshow(b[102], alpha=0.4)
+    plt.imshow(c[102], alpha=0.4)
+    plt.imshow(d[102], alpha=0.4)
     plt.title(f"CP {cp_idx}")
     plt.savefig(f"data/rotated/png/CP-{cp_idx:3}.png")
     plt.clf()
