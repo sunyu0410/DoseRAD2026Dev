@@ -7,6 +7,7 @@ from rotate import rotate_image, rotate_image_sitk
 from geometry import *
 import matplotlib.pyplot as plt
 from ct import get_body_mask
+import torch
 
 
 class Plan:
@@ -76,6 +77,22 @@ class Plan:
         self.cp_idx = cp_idx
 
         self.rotate_to_bev(masked_to_body=True)
+        self.get_torch_data()
+
+    @staticmethod
+    def get_bbox(arr, margin=5):
+        """Get the bounding box of an np mask
+        results in np array as (zmin, ymin, xmin), (zmax, ymax, xmax)
+        """
+
+        shape = arr.shape
+        idx = np.array(np.where(arr > 0))
+
+        # Safety check
+        min_idx = np.clip(idx.min(1) - margin, 0, shape)
+        max_idx = np.clip(idx.max(1) + margin, 0, shape)
+
+        return np.stack([min_idx, max_idx])
 
     def rotate_to_bev(self, masked_to_body=True):
 
@@ -120,6 +137,24 @@ class Plan:
 
         # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
 
+    def get_torch_data(self):
+        data = [self.img_rot, self.dose_rot, self.mask_rot, self.bev]
+
+        (zmin, ymin, xmin), (zmax, ymax, xmax) = self.get_bbox(
+            sitk.GetArrayFromImage(self.bev), margin=5
+        )
+
+        tensors = []
+        for d in data:
+            arr = sitk.GetArrayFromImage(d)
+            arr_cropped = arr[zmin : zmax + 1, ymin : ymax + 1, xmin : xmax + 1]
+            tensor = torch.tensor(arr_cropped)
+            # Move the main axis (AP) to the last dimension
+            tensor = tensor.moveaxis(1, 2)
+            tensors.append(tensor)
+
+        self.tensors = tensors
+
 
 if __name__ == "__main__":
     plan = Plan(
@@ -141,6 +176,8 @@ if __name__ == "__main__":
     sitk.WriteImage(plan.dose_rot, f"data/rotated/dose{ga}.mha")
     sitk.WriteImage(plan.mask_rot, f"data/rotated/body_mask{ga}.nii.gz")
     sitk.WriteImage(plan.bev, f"data/rotated/bev{ga}.nii.gz")
+
+    torch.save(plan.tensors, f"data/rotated/tensors.pt")
 
     a = sitk.GetArrayFromImage(plan.img_rot)
     b = sitk.GetArrayFromImage(plan.dose_rot)
