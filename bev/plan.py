@@ -19,6 +19,8 @@ class Plan:
         self.body_mask = get_body_mask(self.img, thres=-1024)
         self.info = json.load(open(info_json_path))
 
+        self.and_filter = lambda x, y: sitk.AndImageFilter().Execute(x, y)
+
         self.parse_json()
 
         self.set_state(beam_id=0, cp_idx=0)
@@ -73,9 +75,9 @@ class Plan:
         self.beam_id = beam_id
         self.cp_idx = cp_idx
 
-        self.rotate_to_bev()
+        self.rotate_to_bev(masked_to_body=True)
 
-    def rotate_to_bev(self):
+    def rotate_to_bev(self, masked_to_body=True):
 
         beam = self.beam_info[self.beam_id]
         cp = self.cp[self.beam_id][self.cp_idx]
@@ -113,6 +115,8 @@ class Plan:
         self.mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], self.isocentre)
         drawer = MLCDrawer(self.img_rot, self.mlc, self.isocentre, self.sad)
         self.bev = drawer.cal_bev_beam_path()
+        if masked_to_body:
+            self.bev = self.and_filter(self.bev, self.mask_rot)
 
         # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
 
@@ -143,10 +147,10 @@ if __name__ == "__main__":
     c = sitk.GetArrayFromImage(plan.mask_rot)
     d = sitk.GetArrayFromImage(plan.bev)
 
-    plt.imshow(a[102], alpha=0.4, cmap="gray")
-    plt.imshow(b[102], alpha=0.4)
-    plt.imshow(c[102], alpha=0.4)
-    plt.imshow(d[102], alpha=0.4)
+    plt.imshow(a[:, 139, :], alpha=0.4, cmap="gray")
+    plt.imshow(b[:, 139, :], alpha=0.4)
+    plt.imshow(c[:, 139, :], alpha=0.4)
+    plt.imshow(d[:, 139, :], alpha=0.4)
     plt.title(f"CP {cp_idx}")
     plt.savefig(f"data/rotated/png/CP-{cp_idx:3}.png")
     plt.clf()
