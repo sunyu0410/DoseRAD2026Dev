@@ -7,10 +7,6 @@ import pickle
 
 REPO_ID = "LMUK-RADONC-PHYS-RES/DoseRAD2026"
 BASE_URL = f"https://huggingface.co/datasets/{REPO_ID}/resolve/main"
-# https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP000.mha
-NUM_PARALLEL_SCRIPTS = 4
-OUTPUT_DIR = "download/download_scripts"
-TARGET_DATA_DIR = './download'
 
 # Fetch all file metadata recursively from the remote server
 files = list_repo_tree(REPO_ID, repo_type="dataset", recursive=True)
@@ -19,7 +15,7 @@ folders = []
 fl = []
 others = []
 
-for f in tqdm(files, total=122414):
+for f in tqdm(files, total=122410):
     if isinstance(f, RepoFile):
         fl.append(f.path)
     elif isinstance(f, RepoFolder):
