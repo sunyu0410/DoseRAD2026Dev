@@ -3,7 +3,7 @@ import SimpleITK as sitk
 from pathlib import Path
 import json
 from collections import OrderedDict as odict
-from rotate import rotate_image, rotate_image_sitk
+from utils.rotate import rotate_image, rotate_image_sitk
 from geometry import *
 import matplotlib.pyplot as plt
 from ct import get_body_mask
@@ -29,6 +29,10 @@ class Plan:
     @property
     def isocentre(self):
         return self.beam_info[self.beam_id]["isocentre"]
+
+    @property
+    def isocentre_ijk(self):
+        return self.img.TransformPhysicalPointToIndex(self.isocentre) 
 
     @property
     def gantry_angle(self):
@@ -138,6 +142,7 @@ class Plan:
         # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
 
     def get_torch_data(self):
+        return None
         data = [self.img_rot, self.dose_rot, self.mask_rot, self.bev]
 
         (zmin, ymin, xmin), (zmax, ymax, xmax) = self.get_bbox(
@@ -158,36 +163,41 @@ class Plan:
 
 if __name__ == "__main__":
     plan = Plan(
-        img_file_path=r"data/ct.mha",
-        info_json_path=r"data/1ABB006.json",
-        dose_dir=r"data",
+        img_file_path=r"data/DoseRAD2026/photon/training/1ABB006/image/ct.mha",
+        info_json_path=r"data/DoseRAD2026/photon/training/1ABB006/1ABB006.json",
+        dose_dir=r"data/DoseRAD2026/photon/training/1ABB006/dose",
     )
     print(plan.beam_info)
 
-    # In [5]: img_rot.TransformPhysicalPointToIndex(plan.isocentre)
-    # Out[5]: (102, 139, 109)
 
-    beam_id, cp_idx = 0, 23
-    plan.set_state(beam_id=beam_id, cp_idx=cp_idx)
+    beam_id = 0
 
-    ga = plan.gantry_angle
+    for cp_idx in tqdm(range(180)):
 
-    sitk.WriteImage(plan.img_rot, f"data/rotated/ct{ga}.mha")
-    sitk.WriteImage(plan.dose_rot, f"data/rotated/dose{ga}.mha")
-    sitk.WriteImage(plan.mask_rot, f"data/rotated/body_mask{ga}.nii.gz")
-    sitk.WriteImage(plan.bev, f"data/rotated/bev{ga}.nii.gz")
+        plan.set_state(beam_id=beam_id, cp_idx=cp_idx)
 
-    torch.save(plan.tensors, f"data/rotated/tensors.pt")
+        ga = plan.gantry_angle
 
-    a = sitk.GetArrayFromImage(plan.img_rot)
-    b = sitk.GetArrayFromImage(plan.dose_rot)
-    c = sitk.GetArrayFromImage(plan.mask_rot)
-    d = sitk.GetArrayFromImage(plan.bev)
+        x, y, z = plan.isocentre_ijk
 
-    plt.imshow(a[:, 139, :], alpha=0.4, cmap="gray")
-    plt.imshow(b[:, 139, :], alpha=0.4)
-    plt.imshow(c[:, 139, :], alpha=0.4)
-    plt.imshow(d[:, 139, :], alpha=0.4)
-    plt.title(f"CP {cp_idx}")
-    plt.savefig(f"data/rotated/png/CP-{cp_idx:3}.png")
-    plt.clf()
+        a = sitk.GetArrayFromImage(plan.img_rot)
+        b = sitk.GetArrayFromImage(plan.dose_rot)
+        c = sitk.GetArrayFromImage(plan.mask_rot)
+        d = sitk.GetArrayFromImage(plan.bev)
+
+        plt.imshow(a[x, :, :], alpha=0.4, cmap="gray")
+        plt.imshow(b[x, :, :], alpha=0.4)
+        plt.imshow(c[x, :, :], alpha=0.4)
+        plt.imshow(d[x, :, :], alpha=0.4)
+        plt.title(f"CP {cp_idx}")
+        plt.savefig(f"data/rotated/png/CP-{cp_idx:3}.png")
+        plt.clf()
+
+
+    
+    # sitk.WriteImage(plan.img_rot, f"data/rotated/ct_{ga}.nii.gz")
+    # sitk.WriteImage(plan.dose_rot, f"data/rotated/dose_{ga}.nii.gz")
+    # sitk.WriteImage(plan.mask_rot, f"data/rotated/body_mask_{ga}.nii.gz")
+    # sitk.WriteImage(plan.bev, f"data/rotated/bev_{ga}.nii.gz")
+
+    # torch.save(plan.tensors, f"data/rotated/tensors.pt")

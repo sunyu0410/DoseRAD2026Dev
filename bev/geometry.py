@@ -4,7 +4,7 @@ import SimpleITK as sitk
 import json
 from tqdm import tqdm
 from skimage.draw import polygon
-from rotate import rotate_image
+from utils.rotate import rotate_image
 import cv2
 from scipy.ndimage import label
 
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         infile=f"data/Dose_B0_CP{cp_idx:03d}.mha",
         isocentre=isocentre,
         degree=-gantry_angle,
-        outfile=f"data/rotated/d{gantry_angle}.mha",
+        outfile=f"data/rotated/d_{gantry_angle}.nii.gz",
         bg_value=0,
     )
 
@@ -256,5 +256,5 @@ if __name__ == "__main__":
     drawer = MLCDrawer(ct_rot, mlc, isocentre, sad)
     bev = drawer.cal_bev_beam_path()
 
-    sitk.WriteImage(ct_rot, f"data/rotated/ct{gantry_angle}.mha")
-    sitk.WriteImage(bev, f"data/rotated/bev{gantry_angle}.nii.gz")
+    sitk.WriteImage(ct_rot, f"data/rotated/ct_{gantry_angle}.nii.gz")
+    sitk.WriteImage(bev, f"data/rotated/bev_{gantry_angle}.nii.gz")
