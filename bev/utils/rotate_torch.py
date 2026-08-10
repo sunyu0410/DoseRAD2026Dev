@@ -150,8 +150,12 @@ if __name__ == "__main__":
 
     torch.cuda.empty_cache()
     start = perf_counter()
-    degrees = range(20)
-    result = rotate_image_split(img_tensor, img.GetSpacing(), img.GetOrigin(), isocentre, degrees)
+    degrees = torch.tensor([-180]*10)
+    result = rotate_image_batched(img_tensor, img.GetSpacing(), img.GetOrigin(), isocentre, degrees)
     end = perf_counter()
 
     print(end - start)
+
+    img_ = sitk.GetImageFromArray(result.cpu().numpy().astype(np.float32)[0])
+    img_.CopyInformation(img)
+    sitk.WriteImage(img_, 'data/rotated/torch_rotated.mha')

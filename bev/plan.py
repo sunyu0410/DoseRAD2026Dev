@@ -24,13 +24,14 @@ class Plan:
 
         # self.body_mask = get_body_mask(self.img, thres=-1024)
 
-        self.and_filter = lambda x, y: sitk.AndImageFilter().Execute(x, y)
-
         self.parse_json()
 
         self.create_data_chunks()
         self.cache = dict()
 
+    @staticmethod
+    def and_filter(x, y):
+        return sitk.AndImageFilter().Execute(x, y)
 
     def create_data_chunks(self):
         self.groups = []
@@ -158,7 +159,7 @@ class Plan:
         torch.cuda.empty_cache()
 
         # Mask
-        mask_rot = dose_rot > -1024
+        mask_rot = img_rot > -1024
 
         # BEV
         bev = []
@@ -174,29 +175,44 @@ class Plan:
 
 
 if __name__ == "__main__":
+    # plan = Plan(
+    #     img_file_path=r"data/DoseRAD2026/photon/training/1ABB006/image/ct.mha",
+    #     info_json_path=r"data/DoseRAD2026/photon/training/1ABB006/1ABB006.json",
+    #     dose_dir=r"data/DoseRAD2026/photon/training/1ABB006/dose",
+    # )
+
     plan = Plan(
-        img_file_path=r"data/DoseRAD2026/photon/training/1ABB006/image/ct.mha",
-        info_json_path=r"data/DoseRAD2026/photon/training/1ABB006/1ABB006.json",
-        dose_dir=r"data/DoseRAD2026/photon/training/1ABB006/dose",
+        img_file_path=r"data/ct.mha",
+        info_json_path=r"data/1ABB006.json",
+        dose_dir=r"data",
     )
     print(plan.beam_info)
 
 
     img_rot, dose_rot, mask_rot, bev = plan.get(beam_id=0, cp_idx=0)
 
-    import matplotlib.pyplot as plt
-    plt.imshow(img_rot[102, :, :], alpha=0.4, cmap="gray")
-    plt.imshow(dose_rot[102, :, :], alpha=0.4)
-    plt.imshow(mask_rot[102, :, :], alpha=0.4)
-    plt.imshow(bev[102, :, :], alpha=0.4)
-    plt.savefig(f"preview.png")
-    plt.clf()
+    # import matplotlib.pyplot as plt
+    # plt.imshow(img_rot[102, :, :], alpha=0.4, cmap="gray")
+    # plt.imshow(dose_rot[102, :, :], alpha=0.4)
+    # plt.imshow(mask_rot[102, :, :], alpha=0.4)
+    # plt.imshow(bev[102, :, :], alpha=0.4)
+    # plt.savefig(f"preview.png")
+    # plt.clf()
 
+    ref_img = sitk.ReadImage('data/ct.mha')
+    img_rot_sitk =  sitk.GetImageFromArray(img_rot.numpy().astype(np.float32))
+    dose_rot_sitk =  sitk.GetImageFromArray(dose_rot.numpy().astype(np.float32))
+    mask_rot_sitk =  sitk.GetImageFromArray(mask_rot.numpy().astype(np.uint8))
+    bev_sitk =  sitk.GetImageFromArray(bev.numpy().astype(np.uint8))
 
-    
-    # sitk.WriteImage(plan.img_rot, f"data/rotated/ct_{ga}.nii.gz")
-    # sitk.WriteImage(plan.dose_rot, f"data/rotated/dose_{ga}.nii.gz")
-    # sitk.WriteImage(plan.mask_rot, f"data/rotated/body_mask_{ga}.nii.gz")
-    # sitk.WriteImage(plan.bev, f"data/rotated/bev_{ga}.nii.gz")
+    img_rot_sitk.CopyInformation(ref_img)
+    dose_rot_sitk.CopyInformation(ref_img)
+    mask_rot_sitk.CopyInformation(ref_img)
+    bev_sitk.CopyInformation(ref_img)
+
+    sitk.WriteImage(img_rot_sitk, f"data/rotated/torch/ct_-180.nii.gz")
+    sitk.WriteImage(dose_rot_sitk, f"data/rotated/torch/dose_-180.nii.gz")
+    sitk.WriteImage(mask_rot_sitk, f"data/rotated/torch/body_mask_-180.nii.gz")
+    sitk.WriteImage(bev_sitk, f"data/rotated/torch/bev_-180.nii.gz")
 
     # torch.save(plan.tensors, f"data/rotated/tensors.pt")
