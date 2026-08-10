@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "black>=26.5.1",
     "imageio[pillow]>=2.37.4",
     "ipython>=9.16.1",
     "jupyter>=1.1.1",

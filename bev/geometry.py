@@ -188,7 +188,7 @@ class MLCDrawer:
 
         return ratios
 
-    def cal_bev_beam_path(self):
+    def cal_bev_beam_path(self, return_sitk=False):
 
         img_arr = sitk.GetArrayFromImage(self.ref_img)
         arr = np.zeros(img_arr.shape, np.uint8)
@@ -211,11 +211,15 @@ class MLCDrawer:
             # intc_shape_idx is a collections of shape indices
             arr = draw_polygon(arr, i, intc_shape_idx)
 
-        img = sitk.GetImageFromArray(arr)
-        img.CopyInformation(self.ref_img)
+        if return_sitk:
 
-        return img
+            img = sitk.GetImageFromArray(arr)
+            img.CopyInformation(self.ref_img)
 
+            return img
+        else:
+            return arr
+            
 
 if __name__ == "__main__":
     isocentre = np.array([-46.84718448, 27.77766326, -28.13538836])

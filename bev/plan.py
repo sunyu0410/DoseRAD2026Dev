@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 from collections import OrderedDict as odict
 from utils.rotate import rotate_image, rotate_image_sitk
+from utils.rotate_torch import rotate_image_batched
 from geometry import *
 import matplotlib.pyplot as plt
 from ct import get_body_mask
@@ -12,31 +13,60 @@ import torch
 
 class Plan:
     def __init__(self, img_file_path, info_json_path, dose_dir):
-        self.img_file_path = img_file_path
-        self.info_json_path = info_json_path
+        self.img_file_path = img_file_path          # CT path
+        self.img = sitk.ReadImage(img_file_path)    # CT sitk
+        self.img_arr = self.file2arr(img_file_path) # CT numpy
+        
+        self.info_json_path = info_json_path 
+        self.info = json.load(open(info_json_path)) # -> parsed into self.beam_info, cp, n_beams
+
         self.dose_dir = Path(dose_dir)
 
-        self.img = sitk.ReadImage(img_file_path)
-        self.body_mask = get_body_mask(self.img, thres=-1024)
-        self.info = json.load(open(info_json_path))
+        # self.body_mask = get_body_mask(self.img, thres=-1024)
 
         self.and_filter = lambda x, y: sitk.AndImageFilter().Execute(x, y)
 
         self.parse_json()
 
-        self.set_state(beam_id=0, cp_idx=0)
+        self.create_data_chunks()
+        self.cache = dict()
 
-    @property
-    def isocentre(self):
-        return self.beam_info[self.beam_id]["isocentre"]
 
-    @property
-    def isocentre_ijk(self):
-        return self.img.TransformPhysicalPointToIndex(self.isocentre) 
+    def create_data_chunks(self):
+        self.groups = []
+        for i in range(self.n_beams):
+            group = [(i, j) for j in torch.split(torch.arange(self.beam_info[i]["n_cp"]), 10)]
+            self.groups.extend(group)
 
-    @property
-    def gantry_angle(self):
-        return self.cp[self.beam_id][self.cp_idx]["ga"]
+    def get(self, beam_id, cp_idx):
+        # Get which group it belongs to
+        match = [g for g in self.groups if g[0]==beam_id and cp_idx in g[1]]
+        assert len(match) == 1
+
+        # Get the key
+        cp_list = match[0][1]
+        key = (beam_id, cp_list)
+        
+        # Get the relative position of the sample
+        idx = torch.where(cp_list==cp_idx)[0].item()
+
+        # If not there, fetch it
+        if key not in self.cache:
+            print('Fetching data for beam_id:', beam_id, 'cp_list:', cp_list)
+            data = self.get_batch(beam_id, cp_list.tolist())
+            self.cache[key] = data
+
+        # Return it
+        img_rot, dose_rot, mask_rot, bev = self.cache[key]
+        return img_rot[idx], dose_rot[idx], mask_rot[idx], bev[idx]
+            
+
+    @staticmethod
+    def file2arr(filepath):
+        img = sitk.ReadImage(filepath)
+        arr = sitk.GetArrayFromImage(img)
+        return arr
+
 
     def parse_json(self):
         # In [113]: beam_info[0]
@@ -75,14 +105,6 @@ class Plan:
         )
         self.n_beams = len(self.beam_info)
 
-    def set_state(self, beam_id, cp_idx):
-        assert cp_idx in self.cp[beam_id]
-        self.beam_id = beam_id
-        self.cp_idx = cp_idx
-
-        self.rotate_to_bev(masked_to_body=True)
-        self.get_torch_data()
-
     @staticmethod
     def get_bbox(arr, margin=5):
         """Get the bounding box of an np mask
@@ -98,67 +120,57 @@ class Plan:
 
         return np.stack([min_idx, max_idx])
 
-    def rotate_to_bev(self, masked_to_body=True):
+    def get_batch(self, beam_id, cp_list):
+        # beam_id, cp_list, self = 0, range(10), plan
 
-        beam = self.beam_info[self.beam_id]
-        cp = self.cp[self.beam_id][self.cp_idx]
+        beam = self.beam_info[beam_id]
+        sad = beam["sad"]
+        isocentre = self.beam_info[beam_id]["isocentre"]
 
-        self.sad = beam["sad"]
-        isocentre = self.isocentre
-        gantry_angle = self.gantry_angle
-
-        # Rotate images and store them as self attributes
-        angle = -self.gantry_angle  # Reverse the gantry angle
-
-        self.img_rot = rotate_image(
-            infile=self.img_file_path,
-            isocentre=isocentre,
-            degree=angle,
+        # CT
+        degrees_list = torch.tensor([self.cp[beam_id][cp_idx]['ga'] for cp_idx in cp_list])
+        img_rot = rotate_image_batched(
+            tensor_img = torch.tensor(self.img_arr).cuda().to(torch.float16),
+            spacing = self.img.GetSpacing(),
+            origin = self.img.GetOrigin(),
+            isocentre = isocentre,
+            degrees_list = degrees_list,
+            axis='z',
+            bg_value=-1024,
+            pad_voxels=None
         )
+        img_rot = img_rot.cpu()
+        torch.cuda.empty_cache()
 
-        self.dose_rot = rotate_image(
-            infile=str(self.dose_dir / f"Dose_B{self.beam_id}_CP{self.cp_idx:03d}.mha"),
-            isocentre=isocentre,
-            degree=angle,
+        # Dose
+        dose_arr = np.stack([self.file2arr(str(self.dose_dir / f"Dose_B{beam_id}_CP{cp_idx:03d}.mha")) for cp_idx in cp_list], axis=0)
+        dose_rot = rotate_image_batched(
+            tensor_img = torch.tensor(dose_arr).unsqueeze(1).cuda().to(torch.float16),
+            spacing = self.img.GetSpacing(),
+            origin = self.img.GetOrigin(),
+            isocentre = isocentre,
+            degrees_list = degrees_list,
+            axis='z',
             bg_value=0,
+            pad_voxels=None
         )
+        dose_rot = dose_rot.cpu()
+        torch.cuda.empty_cache()
 
-        # Rotate an existing sitk image, not from file, hence using rotate_image_sitk
-        self.mask_rot = rotate_image_sitk(
-            image=self.body_mask,
-            isocentre=isocentre,
-            degree=angle,
-            bg_value=0,
-            intpl=sitk.sitkNearestNeighbor,
-        )
+        # Mask
+        mask_rot = dose_rot > -1024
 
-        # Get the BEV
-        self.mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], self.isocentre)
-        drawer = MLCDrawer(self.img_rot, self.mlc, self.isocentre, self.sad)
-        self.bev = drawer.cal_bev_beam_path()
-        if masked_to_body:
-            self.bev = self.and_filter(self.bev, self.mask_rot)
+        # BEV
+        bev = []
+        for i,cp_idx in enumerate(cp_list):
+            cp = self.cp[beam_id][cp_idx]
+            mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], isocentre)
+            drawer = MLCDrawer(self.img, mlc, isocentre, sad)
+            bev.append(drawer.cal_bev_beam_path())
+        bev = torch.tensor(np.stack(bev, axis=0))
 
-        # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
+        return img_rot, dose_rot, mask_rot, bev
 
-    def get_torch_data(self):
-        return None
-        data = [self.img_rot, self.dose_rot, self.mask_rot, self.bev]
-
-        (zmin, ymin, xmin), (zmax, ymax, xmax) = self.get_bbox(
-            sitk.GetArrayFromImage(self.bev), margin=5
-        )
-
-        tensors = []
-        for d in data:
-            arr = sitk.GetArrayFromImage(d)
-            arr_cropped = arr[zmin : zmax + 1, ymin : ymax + 1, xmin : xmax + 1]
-            tensor = torch.tensor(arr_cropped)
-            # Move the main axis (AP) to the last dimension
-            tensor = tensor.moveaxis(1, 2)
-            tensors.append(tensor)
-
-        self.tensors = tensors
 
 
 if __name__ == "__main__":
@@ -170,28 +182,15 @@ if __name__ == "__main__":
     print(plan.beam_info)
 
 
-    beam_id = 0
+    img_rot, dose_rot, mask_rot, bev = plan.get(beam_id=0, cp_idx=0)
 
-    for cp_idx in tqdm(range(180)):
-
-        plan.set_state(beam_id=beam_id, cp_idx=cp_idx)
-
-        ga = plan.gantry_angle
-
-        x, y, z = plan.isocentre_ijk
-
-        a = sitk.GetArrayFromImage(plan.img_rot)
-        b = sitk.GetArrayFromImage(plan.dose_rot)
-        c = sitk.GetArrayFromImage(plan.mask_rot)
-        d = sitk.GetArrayFromImage(plan.bev)
-
-        plt.imshow(a[x, :, :], alpha=0.4, cmap="gray")
-        plt.imshow(b[x, :, :], alpha=0.4)
-        plt.imshow(c[x, :, :], alpha=0.4)
-        plt.imshow(d[x, :, :], alpha=0.4)
-        plt.title(f"CP {cp_idx}")
-        plt.savefig(f"data/rotated/png/CP-{cp_idx:3}.png")
-        plt.clf()
+    import matplotlib.pyplot as plt
+    plt.imshow(img_rot[102, :, :], alpha=0.4, cmap="gray")
+    plt.imshow(dose_rot[102, :, :], alpha=0.4)
+    plt.imshow(mask_rot[102, :, :], alpha=0.4)
+    plt.imshow(bev[102, :, :], alpha=0.4)
+    plt.savefig(f"preview.png")
+    plt.clf()
 
 
     
