@@ -1,7 +1,0 @@
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP001.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP002.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP003.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP004.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP005.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP006.mha
-https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/photon/training/1ABB006/dose/Dose_B0_CP007.mha
