@@ -142,7 +142,14 @@ class Plan:
         # Can then access self.img_rot, self.dose_rot, self.mask_rot and self.bev
 
     def get_torch_data(self):
-        return None
+        # self.tensors = [
+        #     torch.tensor(sitk.GetArrayFromImage(self.img_rot)),
+        #     torch.tensor(sitk.GetArrayFromImage(self.dose_rot)),
+        #     torch.tensor(sitk.GetArrayFromImage(self.mask_rot)),
+        #     torch.tensor(sitk.GetArrayFromImage(self.bev))
+
+        # ]
+
         data = [self.img_rot, self.dose_rot, self.mask_rot, self.bev]
 
         (zmin, ymin, xmin), (zmax, ymax, xmax) = self.get_bbox(
