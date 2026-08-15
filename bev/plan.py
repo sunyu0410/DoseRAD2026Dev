@@ -80,8 +80,8 @@ class Plan:
         self.beam_id = beam_id
         self.cp_idx = cp_idx
 
-        self.rotate_to_bev(masked_to_body=True)
-        self.get_torch_data()
+        # self.rotate_to_bev(masked_to_body=True)
+        # self.get_torch_data()
 
     @staticmethod
     def get_bbox(arr, margin=5):

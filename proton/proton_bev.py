@@ -24,7 +24,7 @@ def rotate_image_batched(
     if tensor_img.dim() == 3:
         tensor_img = tensor_img.unsqueeze(0).unsqueeze(0)
     elif tensor_img.dim() == 4:
-        tensor_img = tensor_img.unsqueeze(0)
+        tensor_img = tensor_img.unsqueeze(1)
 
     _, _, D, H, W = tensor_img.shape
     device = tensor_img.device
@@ -68,34 +68,13 @@ def rotate_image_batched(
     ones = torch.ones(num_batch, device=device)
 
     # 7. Construct the batched 3x4 affine matrices in parallel on GPU
-    if axis == "z":
-        row0 = torch.stack(
-            [cos_a, -sin_a, zeros, x_c * (1 - cos_a) + y_c * sin_a], dim=1
-        )
-        row1 = torch.stack(
-            [sin_a, cos_a, zeros, -x_c * sin_a + y_c * (1 - cos_a)], dim=1
-        )
-        row2 = torch.stack([zeros, zeros, ones, zeros], dim=1)
-    elif axis == "y":
-        row0 = torch.stack(
-            [cos_a, zeros, sin_a, x_c * (1 - cos_a) - z_c * sin_a], dim=1
-        )
-        row1 = torch.stack([zeros, ones, zeros, zeros], dim=1)
-        row2 = torch.stack(
-            [-sin_a, zeros, cos_a, x_c * sin_a + z_c * (1 - cos_a)], dim=1
-        )
-    elif axis == "x":
-        row0 = torch.stack([ones, zeros, zeros, zeros], dim=1)
-        row1 = torch.stack(
-            [zeros, cos_a, -sin_a, y_c * (1 - cos_a) + z_c * sin_a], dim=1
-        )
-        row2 = torch.stack(
-            [zeros, sin_a, cos_a, -y_c * sin_a + z_c * (1 - cos_a)], dim=1
-        )
-
+    assert axis == "z"
+    row0 = torch.stack([cos_a, -sin_a, zeros, x_c * (1 - cos_a) + y_c * sin_a], dim=1)
+    row1 = torch.stack([sin_a, cos_a, zeros, -x_c * sin_a + y_c * (1 - cos_a)], dim=1)
+    row2 = torch.stack([zeros, zeros, ones, zeros], dim=1)
+    
     # Shape: (180, 3, 4)
     batch_matrices = torch.stack([row0, row1, row2], dim=1).to(dtype)
-    print(batch_matrices)
 
     # 8. Expand input image and apply the math-shift workaround
     if tensor_img.size(0) != num_batch:
@@ -203,8 +182,8 @@ if __name__ == "__main__":
     src_r = rotate_pt_z(source, isocentre, degree)
     tgt_r = rotate_pt_z(target, isocentre, degree)
 
-    print(f'Source: {source} -> {src_r')
-    print(f'Target: {target} -> {tgt_r')
+    print(f'Source: {source} -> {src_r}')
+    print(f'Target: {target} -> {tgt_r}')
 
     # Source: [483.87, -928.05, 33.99] -> tensor([  -16.1274, -1062.0244,    33.9900])
     # Target: [-14.413875853458421, -61.036056014982364, 33.99] -> tensor([-14.1468, -62.0264,  33.9900])
@@ -236,7 +215,7 @@ if __name__ == "__main__":
     from scipy.special import erf
     def cal_fluence_z(z, r0, gamma, sigma_e):
         sigma_r = gamma * sigma_e
-        fluence = 0.5 * (1 - erf((z-r0)/np.sqrt(2)*sigma_r)
+        fluence = 0.5 * (1 - erf((z-r0)/np.sqrt(2)*sigma_r))
         return fluence
 
     def cal_stop_power(z, beta):
