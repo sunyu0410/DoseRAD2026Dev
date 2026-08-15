@@ -17,6 +17,7 @@ class Plan:
         self.dose_dir = Path(dose_dir)
 
         self.img = sitk.ReadImage(img_file_path)
+        self.img_arr = sitk.GetArrayFromImage(self.img)
         self.body_mask = get_body_mask(self.img, thres=-1024)
         self.info = json.load(open(info_json_path))
 

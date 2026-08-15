@@ -156,9 +156,8 @@ class MLC:
 class MLCDrawer:
     """BEV, assuming the gantry is rotated to 0 angle"""
 
-    def __init__(self, ref_img, mlc, isocentre, sad):
+    def __init__(self, ref_img, isocentre, sad):
         self.ref_img = ref_img
-        self.mlc = mlc
         self.isocentre = isocentre
         self.isocentre_idx = self.ref_img.TransformPhysicalPointToIndex(self.isocentre)
         self.sad = sad
@@ -171,6 +170,9 @@ class MLCDrawer:
         self.dist_iso = get_distance_slice_pt(
             self.ref_img, self.isocentre_idx[1], self.source_mm
         )  # source slice to isocentre
+
+        self.img_arr = sitk.GetArrayFromImage(self.ref_img)
+        self.ratios = self.cal_ratios()
 
     def idx2mm(self, indices):
         return [self.ref_img.TransformIndexToPhysicalPoint(i) for i in indices]
@@ -188,20 +190,18 @@ class MLCDrawer:
 
         return ratios
 
-    def cal_bev_beam_path(self):
+    def cal_bev_beam_path(self, mlc, return_sitk=False):
 
-        img_arr = sitk.GetArrayFromImage(self.ref_img)
-        arr = np.zeros(img_arr.shape, np.uint8)
-
-        # Scaling ratios for each slice
-        ratios = self.cal_ratios()
+        # img_arr = sitk.GetArrayFromImage(self.ref_img)
+        # ratios = self.cal_ratios()
+        arr = np.zeros(self.img_arr.shape, np.uint8)
 
         # Use the ratio to draw polygon on each slice
-        for i, ratio in enumerate(ratios):
+        for i, ratio in enumerate(self.ratios):
 
             # Intercepted physical locations for all segments
             intc_shape_pts = [
-                get_intercept_points(seg, self.source_mm, ratio) for seg in self.mlc
+                get_intercept_points(seg, self.source_mm, ratio) for seg in mlc
             ]
 
             # Intercepted voxel idx for all segments
@@ -210,11 +210,12 @@ class MLCDrawer:
             # Draw the polygon at slice i
             # intc_shape_idx is a collections of shape indices
             arr = draw_polygon(arr, i, intc_shape_idx)
-
-        img = sitk.GetImageFromArray(arr)
-        img.CopyInformation(self.ref_img)
-
-        return img
+        if return_sitk:
+            img = sitk.GetImageFromArray(arr)
+            img.CopyInformation(self.ref_img)
+            return img
+        else:
+            return arr
 
 
 if __name__ == "__main__":

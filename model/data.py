@@ -15,6 +15,7 @@ from torch.utils.data import Dataset, DataLoader
 
 
 from proton_bev import rotate_image_batched
+from geometry import *
 
 def read_dose_parallel(file_paths, num_threads=32, scale_factor=1e5):
     n_files = len(file_paths)
@@ -38,68 +39,110 @@ def read_dose_parallel(file_paths, num_threads=32, scale_factor=1e5):
 
     return combined_array
 
-
-class PlanData(Dataset):
+class BeamData(Dataset):
     def __init__(self, plan):
         self.plan = plan
-        self.n_beam = plan.n_beams
-        self.ids = [(i, j) for i in range(self.plan.n_beams) for j in range(self.plan.beam_info[i]['n_cp'])]
         self.rot_input_tensor = torch.randn((30,)+self.plan.img.GetSize()[::-1]).to(torch.float16).cuda()
-        self.load_doses()
+        self.img = torch.tensor(plan.img_arr).cuda()
+
+        # Beam specific information
+        self.isocentre = self.plan.isocentre
+        self.n_cp = self.plan.beam_info[self.plan.beam_id]['n_cp']
+        self.sad = self.plan.beam_info[self.plan.beam_id]['sad']
+        self.cp_info = self.plan.cp[self.plan.beam_id]
+        self.angles = torch.tensor([self.cp_info[i]['ga'] for i in range(self.n_cp)]).cuda()
+
+
+        self.dose = self.load_doses()
         self.rotate_dose()
+        self.img_rot = self.rotate_img()
+        self.bev = self.cal_bev_parallel()
 
     def load_doses(self):
-        self.doses = []
-        for beam_idx in range(self.plan.n_beams):
-            fl = [f'{self.plan.dose_dir}/Dose_B{beam_idx}_CP{i:03d}.mha' for i in range(self.plan.beam_info[beam_idx]['n_cp'])]
-            dose = read_dose_parallel(fl, num_threads=32)
-            dose = torch.tensor(dose)
-
-            # dose = torch.randn((180, 246, 246, 249)) # Simulate
-
-            self.doses.append(dose)
-            break
+        
+        fl = [f'{self.plan.dose_dir}/Dose_B{self.plan.beam_id}_CP{i:03d}.mha' for i in range(self.n_cp)]
+        dose = read_dose_parallel(fl, num_threads=32)
+        dose = torch.tensor(dose)
+        return dose
     
 
     def rotate_dose(self):
-        self.doses_rot = []
-        for beam_idx, dose in enumerate(self.doses):
-            angles = torch.tensor([-c['ga'] for c in self.plan.cp[beam_idx].values()]).cuda()
+        
+        for i in range(6):
+            self.rot_input_tensor[:] = self.dose[30*i:(i+1)*30]
+            d_rot = rotate_image_batched(
+                self.rot_input_tensor,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+                self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
+                self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
+                self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
+                -self.angles[i*30:(i+1)*30],  # Can now be a torch.Tensor of angles on GPU
+                axis="z",
+                bg_value=0,
+                pad_voxels=None,
+            ).cpu()
 
-            for i in range(6):
-                self.rot_input_tensor[:] = dose[30*i:(i+1)*30]
-                d_rot = rotate_image_batched(
-                    self.rot_input_tensor,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
-                    self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
-                    self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
-                    self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
-                    angles[i*30:(i+1)*30],  # Can now be a torch.Tensor of angles on GPU
-                    axis="z",
-                    bg_value=0,
-                    pad_voxels=None,
-                ).cpu()
+            self.dose[30*i:(i+1)*30] = d_rot
+            print('Dose rotated:', 30*i, (i+1)*30)
 
-                self.doses[beam_idx][30*i:(i+1)*30] = d_rot
-                print('Beam', beam_idx, 'rotated:', 30*i, (i+1)*30)
-                
+    def rotate_img(self):
+        rots = []
+        for i in range(6):
+            rot = rotate_image_batched(
+                self.img,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+                self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
+                self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
+                self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
+                -self.angles[i*30:(i+1)*30],  # Can now be a torch.Tensor of angles on GPU
+                axis="z",
+                bg_value=-1024,
+                pad_voxels=None,
+            ).cpu()
+            rots.append(rot)
+        return torch.cat(rots, dim=0)
+
+    def cal_bev_parallel(self, num_threads=32):
+        combined_array = np.zeros((self.n_cp, *self.img.shape), dtype=np.uint8)
+        drawer = MLCDrawer(
+                ref_img=self.plan.img, 
+                isocentre=self.isocentre, 
+                sad=self.sad
+            )
+            
+        def cal_bev(idx):
+            cp = self.cp_info[idx]
+
+            bev = drawer.cal_bev_beam_path(
+                mlc = MLC.get_mlc_segs_mm(cp["l"], cp["r"], self.isocentre)
+            )
+            
+            combined_array[idx] = bev
+
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            list(tqdm(executor.map(cal_bev, range(self.n_cp)), total=self.n_cp, desc="Getting BEV"))
+
+        print(f"Starting parallel load with {num_threads} threads...")
+        print(f"\nFinished. Final array shape: {combined_array.shape}")
+        print(f"Data type: {combined_array.dtype}")
+
+        return combined_array 
         
     def __len__(self):
-        return len(self.ids)
+        return self.n_cp
 
     def __getitem__(self, idx):
-        beam_id, cp_idx = self.ids[idx]
         
-        return self.doses[beam_id][cp_idx]
+        return self.doses[idx]
 
 if __name__ == '__main__':
+    pat_dir = '/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB006'
     plan = Plan(
-        img_file_path=r"/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB006/image/ct.mha",
-        info_json_path=r"/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB006/1ABB006.json",
-        dose_dir=r"/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB006/dose",
+        img_file_path=rf"{pat_dir}/image/ct.mha",
+        info_json_path=rf"{pat_dir}/1ABB006.json",
+        dose_dir=rf"{pat_dir}/dose",
     )
     print(plan.beam_info)
 
-    dataset = PlanData(plan)
+    d = BeamData(plan)
         
 
 
