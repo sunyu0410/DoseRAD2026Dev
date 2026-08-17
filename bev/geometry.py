@@ -4,7 +4,7 @@ import SimpleITK as sitk
 import json
 from tqdm import tqdm
 from skimage.draw import polygon
-from utils.rotate import rotate_image
+from .utils.rotate import rotate_image
 import cv2
 from scipy.ndimage import label
 
