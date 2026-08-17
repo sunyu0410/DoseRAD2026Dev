@@ -1,10 +1,4 @@
-import sys
-sys.path.append('bev')
-sys.path.append('proton')
-sys.path.append('../bev')
-sys.path.append('../proton')
-
-from plan import Plan
+from bev.plan import Plan
 import torch
 
 from concurrent.futures import ThreadPoolExecutor
@@ -12,12 +6,13 @@ from tqdm.auto import tqdm
 import SimpleITK as sitk
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
+from tqdm import tqdm
 
+from proton.proton_bev import rotate_image_batched
+from bev.geometry import *
+from bev.bev_torch import make_grid_5d, get_bev_torch, mm2idx, cal_scales, draw_iso_mlc
 
-from proton_bev import rotate_image_batched
-from geometry import *
-
-def read_dose_parallel(file_paths, num_threads=32, scale_factor=1e5):
+def read_dose_parallel(file_paths, num_threads=8, scale_factor=1e5):
     n_files = len(file_paths)
 
     first_img = sitk.ReadImage(file_paths[0])
@@ -43,7 +38,7 @@ class BeamData(Dataset):
     def __init__(self, plan):
         self.plan = plan
         self.rot_input_tensor = torch.randn((30,)+self.plan.img.GetSize()[::-1]).to(torch.float16).cuda()
-        self.img = torch.tensor(plan.img_arr).cuda()
+        self.img = torch.tensor(plan.img_arr).to(torch.float16).cuda()
 
         # Beam specific information
         self.isocentre = self.plan.isocentre
@@ -52,25 +47,25 @@ class BeamData(Dataset):
         self.cp_info = self.plan.cp[self.plan.beam_id]
         self.angles = torch.tensor([self.cp_info[i]['ga'] for i in range(self.n_cp)]).cuda()
 
-
         self.dose = self.load_doses()
         self.rotate_dose()
         self.img_rot = self.rotate_img()
-        self.bev = self.cal_bev_parallel()
+        # self.bev = self.cal_bev_parallel()
+        self.bev = self.cal_bev()
 
     def load_doses(self):
         
         fl = [f'{self.plan.dose_dir}/Dose_B{self.plan.beam_id}_CP{i:03d}.mha' for i in range(self.n_cp)]
-        dose = read_dose_parallel(fl, num_threads=32)
+        dose = read_dose_parallel(fl, num_threads=8)
         dose = torch.tensor(dose)
         return dose
     
 
     def rotate_dose(self):
         
-        for i in range(6):
+        for i in tqdm(range(6), desc='Rotating dose'):
             self.rot_input_tensor[:] = self.dose[30*i:(i+1)*30]
-            d_rot = rotate_image_batched(
+            self.dose[30*i:(i+1)*30] = rotate_image_batched(
                 self.rot_input_tensor,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
                 self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
@@ -81,14 +76,13 @@ class BeamData(Dataset):
                 pad_voxels=None,
             ).cpu()
 
-            self.dose[30*i:(i+1)*30] = d_rot
-            print('Dose rotated:', 30*i, (i+1)*30)
-
     def rotate_img(self):
-        rots = []
-        for i in range(6):
-            rot = rotate_image_batched(
-                self.img,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+        img_rot = torch.zeros((180,) + self.img.shape)
+
+        for i in tqdm(range(6), desc='Rotating image'):
+            self.rot_input_tensor[:] = self.img.expand(30, -1, -1, -1)
+            img_rot[i*30:(i+1)*30] = rotate_image_batched(
+                self.rot_input_tensor[:],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
                 self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
@@ -97,10 +91,10 @@ class BeamData(Dataset):
                 bg_value=-1024,
                 pad_voxels=None,
             ).cpu()
-            rots.append(rot)
-        return torch.cat(rots, dim=0)
 
-    def cal_bev_parallel(self, num_threads=32):
+        return img_rot
+
+    def cal_bev_parallel(self, num_threads=8):
         combined_array = np.zeros((self.n_cp, *self.img.shape), dtype=np.uint8)
         drawer = MLCDrawer(
                 ref_img=self.plan.img, 
@@ -124,7 +118,45 @@ class BeamData(Dataset):
         print(f"\nFinished. Final array shape: {combined_array.shape}")
         print(f"Data type: {combined_array.dtype}")
 
-        return combined_array 
+        return torch.tensor(combined_array) 
+
+    def cal_bev(self, n_batch=30):
+
+        def _cal_scales(self):
+            src_mm = get_source_location_mm(self.isocentre, 0, self.sad)
+            z_scales = torch.tensor(cal_scales(self.plan.img, self.isocentre, src_mm))[..., None, None]
+            return z_scales
+
+        def _cal_mlc_2d(self):
+            # Get the 2d bev at isocentre for all 180 control points
+            bev_iso_list = []
+            for i in range(180):
+                mlc = MLC.get_mlc_segs_mm(self.cp_info[i]['l'], self.cp_info[i]['r'], self.isocentre)
+                bev_iso = draw_iso_mlc(self.plan.img, mlc) # (nx, nz) -> (246, 249)
+                bev_iso_list.append(bev_iso)
+            bev_iso_list = np.stack(bev_iso_list, axis=0)
+            mlc_masks_2d = torch.tensor(bev_iso_list).to(torch.float32)
+            return mlc_masks_2d
+        
+        # Cal z_scales
+        z_scales = _cal_scales(self)
+        mlc_masks_2d = _cal_mlc_2d(self)
+
+        isocentre_idx = mm2idx(self.plan.img, [self.isocentre])[0]
+
+        # Set the batch number (# of images to process) and get the grid
+        # The grid can be reused for each beam
+        grid_5d = make_grid_5d(n_batch, isocentre_idx, z_scales, self.plan.img).cuda()
+
+        print('Grid created')
+        
+        # Get the beam path by batch
+        bevs = []
+        for i in tqdm(range(0, 180, n_batch), desc='Calulating BEV beam path'):
+            bevs.append(get_bev_torch(mlc_masks_2d[i:(i+n_batch)], grid_5d))
+        bevs = torch.cat(bevs, dim=0)
+
+        return bevs
         
     def __len__(self):
         return self.n_cp

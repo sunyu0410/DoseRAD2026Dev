@@ -3,10 +3,11 @@ import SimpleITK as sitk
 from pathlib import Path
 import json
 from collections import OrderedDict as odict
-from utils.rotate import rotate_image, rotate_image_sitk
-from geometry import *
+
+from bev.utils.rotate import rotate_image, rotate_image_sitk
+from bev.geometry import *
 import matplotlib.pyplot as plt
-from ct import get_body_mask
+from bev.ct import get_body_mask
 import torch
 
 
@@ -94,8 +95,8 @@ class Plan:
         idx = np.array(np.where(arr > 0))
 
         # Safety check
-        min_idx = np.clip(idx.min(1) - margin, 0, shape)
-        max_idx = np.clip(idx.max(1) + margin, 0, shape)
+        min_idx = np.clip(idx.min(1) - margin, 0, shape-1)
+        max_idx = np.clip(idx.max(1) + margin, 0, shape-1)
 
         return np.stack([min_idx, max_idx])
 
@@ -160,7 +161,7 @@ class Plan:
         tensors = []
         for d in data:
             arr = sitk.GetArrayFromImage(d)
-            arr_cropped = arr[zmin : zmax + 1, ymin : ymax + 1, xmin : xmax + 1]
+            arr_cropped = arr[zmin : zmax, ymin : ymax, xmin : xmax]
             tensor = torch.tensor(arr_cropped)
             # Move the main axis (AP) to the last dimension
             tensor = tensor.moveaxis(1, 2)

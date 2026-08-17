@@ -7,9 +7,9 @@ import SimpleITK as sitk
 import json
 
 
-def make_grid_5d(B, isocentre_idx, z_scales):
+def make_grid_5d(B, isocentre_idx, z_scales, ref_img):
     # B = mlc_masks_2d.size(0)                # 180 Control Points
-    nz, ny, nx = ct.GetSize()
+    nz, ny, nx = ref_img.GetSize()
     D, H, W = ny, nx, nz  # Target 3D volume resolution in BEV space
 
     y_coords = torch.linspace(-1.0, 1.0, H)
@@ -94,7 +94,6 @@ if __name__ == "__main__":
         assert beam0["control_points"][cp_idx]["cp_idx"] == cp_idx
         mlc_left = np.array(beam0["control_points"][cp_idx]["mlc_left_int_mm"])
         mlc_right = np.array(beam0["control_points"][cp_idx]["mlc_right_int_mm"])
-        # f'data/Dose_B0_CP{cp_idx:03d}.mha'
         mlc = MLC.get_mlc_segs_mm(mlc_left, mlc_right, isocentre)
         bev_iso = draw_iso_mlc(ct, mlc) # (nx, nz) -> (246, 249)
         bev_iso_list.append(bev_iso)
@@ -123,3 +122,15 @@ if __name__ == "__main__":
     img.CopyInformation(ct)
     sitk.WriteImage(img, f'bev_{ga}_torch.nii.gz')
 
+    # import matplotlib.pyplot as plt
+    # for cp_idx in range(180):
+    #     cp_idx = 90
+    #     dose = sitk.ReadImage(f'{data_dir}/dose/Dose_B0_CP{cp_idx:03d}.mha')
+    #     dose_arr = sitk.GetArrayFromImage(dose)
+
+    #     plt.imshow(dose_arr[:, 139], cmap='gray')
+    #     plt.imshow(bevs[cp_idx][:, 139], alpha=0.3)
+    #     plt.savefig('test.png')
+    #     plt.clf()
+
+    #     break
