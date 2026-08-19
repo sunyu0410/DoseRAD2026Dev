@@ -1,0 +1,4710 @@
+[
+  {
+    "iso_center": [
+      -29.948,
+      -14.556,
+      45.1108
+    ],
+    "beams": [
+      {
+        "gantry_angle": 270.0,
+        "rays": [
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              30.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "e46315b3-76f2-5588-b7a7-3802bad9072f",
+                "output_info": {
+                  "minimum_cutoff": 1.255873910205584e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              33.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "7281785a-2877-569b-8bc0-5105dadb8f5b",
+                "output_info": {
+                  "minimum_cutoff": 9.821714633023453e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "058543b1-3fa7-5c5a-9d9a-34abda158273",
+                "output_info": {
+                  "minimum_cutoff": 1.12898686957462e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "2dae0c08-7b05-5f9d-b2c5-e794ae0fd600",
+                "output_info": {
+                  "minimum_cutoff": 1.3784088152629742e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 3
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "6fef260a-c2ba-516d-8a4f-8339422a08b7",
+                "output_info": {
+                  "minimum_cutoff": 1.274876948901175e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 4
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              42.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "713526a7-f2bb-5d38-9496-3d28e2911b5b",
+                "output_info": {
+                  "minimum_cutoff": 1.0049813273024535e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 5
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              45.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "8f9e032f-1f33-5a5b-981c-84e4c6b42aa9",
+                "output_info": {
+                  "minimum_cutoff": 7.771645283890045e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              51.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "e0fbe41c-eb21-55ad-88e7-df9f6ef62e86",
+                "output_info": {
+                  "minimum_cutoff": 1.002474613878842e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 7
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "5d16e0f6-a2f8-5dbc-97aa-2e838bc0067c",
+                "output_info": {
+                  "minimum_cutoff": 1.0163741831959634e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -20.56,
+              54.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -20.56,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "214f2f7e-3003-53df-9c4a-cd1db8322666",
+                "output_info": {
+                  "minimum_cutoff": 9.265326425636442e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "29b3ce99-c2ab-54d1-965e-af23e5d30bde",
+                "output_info": {
+                  "minimum_cutoff": 8.823386083500238e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 10
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              33.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "12a3e0ae-30f0-5a83-ac3e-90077dfdaddd",
+                "output_info": {
+                  "minimum_cutoff": 1.1387818588391573e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "fc9eea27-af2c-5661-b713-6590952dd202",
+                "output_info": {
+                  "minimum_cutoff": 1.148008220881697e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 12
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "0b6cb4b2-4b5c-5204-8db9-4781aee559b8",
+                "output_info": {
+                  "minimum_cutoff": 1.0761159293130583e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 13
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              36.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "388d7e1e-3d7d-5b63-8dd8-45c936ef16f6",
+                "output_info": {
+                  "minimum_cutoff": 1.1845836140792496e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              39.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "73357af1-d50f-5836-a90e-3308b2f6ca3b",
+                "output_info": {
+                  "minimum_cutoff": 1.029373405122313e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 15
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              51.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "68398e7f-ff05-55d5-8881-e2c773782e5c",
+                "output_info": {
+                  "minimum_cutoff": 1.0231042248512853e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              54.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "eaea61f9-1462-59d6-9e11-ded22f124965",
+                "output_info": {
+                  "minimum_cutoff": 8.533330429584185e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "cd75b494-db54-5c6f-8fc5-9035bb37a010",
+                "output_info": {
+                  "minimum_cutoff": 7.482497440841828e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 18
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -23.56,
+              60.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -23.56,
+              60.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "d70f8513-2e21-52a9-96e8-2eb40bf7d5f3",
+                "output_info": {
+                  "minimum_cutoff": 8.072014148254859e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              36.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "f78dcd49-6292-50fa-bcc3-0294b8193421",
+                "output_info": {
+                  "minimum_cutoff": 8.627618505369348e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "3504f555-32ac-597f-b4df-d9b3517568b0",
+                "output_info": {
+                  "minimum_cutoff": 8.67139519421654e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 21
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "d4f46a6e-2cf8-5d76-923f-dc60f13e08f1",
+                "output_info": {
+                  "minimum_cutoff": 1.0101638588655335e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 22
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "e9b97d58-87fa-55cb-b2f1-1b232aab9a3d",
+                "output_info": {
+                  "minimum_cutoff": 1.136585527467944e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "4d8b3858-e6d4-5c79-b910-28c521d9b14c",
+                "output_info": {
+                  "minimum_cutoff": 1.218015011268865e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 24
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "54f221e5-5c99-5c43-b3ed-facf69810393",
+                "output_info": {
+                  "minimum_cutoff": 9.485534290207367e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "1c61fd94-3e13-56ed-9169-ca4269e411af",
+                "output_info": {
+                  "minimum_cutoff": 1.097114774755151e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 26
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              39.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "f3dda0a7-ffd6-59d2-8803-a8e2b13b7461",
+                "output_info": {
+                  "minimum_cutoff": 9.141198180382969e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "246b8674-db22-565b-9df3-e420813303b8",
+                "output_info": {
+                  "minimum_cutoff": 8.614172256126053e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "ad9cc496-4b06-5f14-bbde-be6352f08e51",
+                "output_info": {
+                  "minimum_cutoff": 9.346841285891236e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 29
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              42.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "67a1db8c-dbb4-5e30-a8d4-95f43b0865b7",
+                "output_info": {
+                  "minimum_cutoff": 1.0685232977803043e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 30
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "fa44905c-2d6d-5b88-80d1-28f2bb22fbce",
+                "output_info": {
+                  "minimum_cutoff": 7.707984154371847e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 31
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              48.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 45.5978,
+                "beamlet_uuid": "151c49ad-4333-5c23-8b59-d7923ea550c4",
+                "output_info": {
+                  "minimum_cutoff": 8.901699788556043e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 32
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              51.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 45.5978,
+                "beamlet_uuid": "897cd663-b1ac-53b2-a830-d5accb421102",
+                "output_info": {
+                  "minimum_cutoff": 9.69919459131623e-07,
+                  "output_file_idx": 0,
+                  "idx_in_output": 33
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "64ac0b82-6140-5c89-8dd4-4e5b33851388",
+                "output_info": {
+                  "minimum_cutoff": 1.0585948552320065e-06,
+                  "output_file_idx": 0,
+                  "idx_in_output": 34
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "33d512ba-1f42-57bf-8d25-8b52ecefa4f8",
+                "output_info": {
+                  "minimum_cutoff": 9.615142076109359e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              54.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "f0c98b7d-c754-5504-83ac-3c8609852a30",
+                "output_info": {
+                  "minimum_cutoff": 8.823447867345741e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 1
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -26.56,
+              57.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -26.56,
+              57.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "84245689-f267-5e91-9d4f-13f7e90993f4",
+                "output_info": {
+                  "minimum_cutoff": 8.948341228442565e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 2
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -29.56,
+              39.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -29.56,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "108adb3d-ad23-5bb6-b47f-374473ddaceb",
+                "output_info": {
+                  "minimum_cutoff": 7.910015015072577e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 3
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "17850052-7a9f-5cf6-960f-f8c6d5a18d1d",
+                "output_info": {
+                  "minimum_cutoff": 7.475563757261442e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "e2ba0497-c798-5bd8-9e1f-0c1b5ada6186",
+                "output_info": {
+                  "minimum_cutoff": 1.0190514180429285e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 5
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "a4db8e2b-1b05-58d5-8040-e131a1b1e53e",
+                "output_info": {
+                  "minimum_cutoff": 9.995337657004117e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 6
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "eec9b08c-7ef7-5a9b-81b0-fbb9418c360c",
+                "output_info": {
+                  "minimum_cutoff": 1.0021559670231826e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -29.56,
+              42.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -29.56,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "a4ce1351-1404-5daf-977c-2f236eeaeaf9",
+                "output_info": {
+                  "minimum_cutoff": 9.305335663176968e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 8
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "8ecb0a2f-733f-5f88-b70b-2b25095190f2",
+                "output_info": {
+                  "minimum_cutoff": 9.929130677377328e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "73d0d54e-73be-59bb-8766-c48e80be557b",
+                "output_info": {
+                  "minimum_cutoff": 1.0162390725602413e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "523b31ad-a575-5c63-a8dc-ed99aa391a38",
+                "output_info": {
+                  "minimum_cutoff": 9.192312647902667e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "0638d2db-4ceb-5a31-8d80-43b23112bf59",
+                "output_info": {
+                  "minimum_cutoff": 8.715772471727619e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -29.56,
+              45.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -29.56,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "c7531ea4-1c78-554e-bd2d-86dfc85464a5",
+                "output_info": {
+                  "minimum_cutoff": 9.441094907727811e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "89a006d3-54c8-5fc7-a071-b3e6456b7e68",
+                "output_info": {
+                  "minimum_cutoff": 8.773111160713143e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 14
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "1517adb5-44ef-5222-b115-6d4a04478373",
+                "output_info": {
+                  "minimum_cutoff": 9.92338765776305e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 15
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "c268a738-2fc0-5714-9900-c7f943601070",
+                "output_info": {
+                  "minimum_cutoff": 1.0169004315488013e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 16
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "4c523b60-473f-564d-8d3b-7c2fa31201d3",
+                "output_info": {
+                  "minimum_cutoff": 9.291718328921578e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 17
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -29.56,
+              48.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -29.56,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "0a252d7f-f3bf-5449-85fe-2867d96f13d7",
+                "output_info": {
+                  "minimum_cutoff": 7.841318038491858e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 18
+                }
+              },
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "380840a3-f008-5f3e-aef0-af6a8c54d3df",
+                "output_info": {
+                  "minimum_cutoff": 1.0156921657274837e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 19
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "8e02b754-b440-5db8-b171-8faf4221908e",
+                "output_info": {
+                  "minimum_cutoff": 7.531714235386449e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 20
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1029.95,
+              -29.56,
+              51.11
+            ],
+            "ray_target": [
+              -29.950000000000045,
+              -29.56,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "78a70714-cc1a-5a1f-beca-44dc280ba7cc",
+                "output_info": {
+                  "minimum_cutoff": 8.256370304204373e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 21
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "gantry_angle": 320.0,
+        "rays": [
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              33.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "ad9530d9-03d9-50fd-a89a-3470159c9e6e",
+                "output_info": {
+                  "minimum_cutoff": 1.008453870644145e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 22
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "808c6196-189d-56ba-9bf9-72bba14f5487",
+                "output_info": {
+                  "minimum_cutoff": 7.967039808799742e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "0380feed-a348-5a22-9044-c3710256eb82",
+                "output_info": {
+                  "minimum_cutoff": 9.594329340536853e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 24
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "ef1ab851-a65a-547d-a613-e52c1d0426b2",
+                "output_info": {
+                  "minimum_cutoff": 1.0163824283251413e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 25
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              36.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "beb349f6-3424-5970-b2d8-40bb39132f9f",
+                "output_info": {
+                  "minimum_cutoff": 8.35502063843473e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 26
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "29c05824-be0b-5bff-9365-2734c647e341",
+                "output_info": {
+                  "minimum_cutoff": 1.051661597263281e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "57ebad00-3938-5dac-8240-20e60a101882",
+                "output_info": {
+                  "minimum_cutoff": 9.345312765003594e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "5bea3326-e2d3-55ed-9bff-b2d03bee0e02",
+                "output_info": {
+                  "minimum_cutoff": 9.196365834189933e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 29
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              39.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "90156f27-41eb-5a1f-ae86-bb6b0fde9f2f",
+                "output_info": {
+                  "minimum_cutoff": 9.950192047330134e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 30
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "5c07d716-fce9-5ffb-ad41-e832399769f4",
+                "output_info": {
+                  "minimum_cutoff": 8.439119566020539e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 31
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "888d8718-c57f-5e78-b07e-98d966c068a5",
+                "output_info": {
+                  "minimum_cutoff": 9.821109622562942e-07,
+                  "output_file_idx": 1,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "b295d313-a96e-5e09-91ba-da1e4f4d7863",
+                "output_info": {
+                  "minimum_cutoff": 1.0571642414182712e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 33
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "60d211aa-1604-5f0d-99f3-4775cc8a446c",
+                "output_info": {
+                  "minimum_cutoff": 1.0853965640926885e-06,
+                  "output_file_idx": 1,
+                  "idx_in_output": 34
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "fd781599-57b1-5e47-826f-3a0e2cb35ca0",
+                "output_info": {
+                  "minimum_cutoff": 9.456613463814321e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              42.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "6e7542b0-1ed8-5163-b935-a316c6f7c830",
+                "output_info": {
+                  "minimum_cutoff": 8.174930186493359e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "e6e6be71-71e0-5706-a6a3-75db867d88a0",
+                "output_info": {
+                  "minimum_cutoff": 1.0345896040666746e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "2bcea5fb-29d2-5fbb-b527-30482284de68",
+                "output_info": {
+                  "minimum_cutoff": 7.611554771421292e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 3
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "9507bf6d-1ce3-54dc-9e11-a3fd7e0eb7d0",
+                "output_info": {
+                  "minimum_cutoff": 7.869089897490168e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "f81a6410-400b-5a90-a2f2-83e0b0fb1344",
+                "output_info": {
+                  "minimum_cutoff": 1.0115881294898133e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 5
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "5600aac3-fb89-5444-9b2d-52fee2d98e5c",
+                "output_info": {
+                  "minimum_cutoff": 8.604848929132646e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              45.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "c33fb1d0-6f71-5502-9c7c-a184fca81204",
+                "output_info": {
+                  "minimum_cutoff": 8.233426620351446e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 7
+                }
+              },
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "fa34fe59-514c-595b-a0fb-3d694105c5d5",
+                "output_info": {
+                  "minimum_cutoff": 8.959231729295538e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 8
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "91f15628-d198-5b02-b6af-d32bce776b99",
+                "output_info": {
+                  "minimum_cutoff": 9.12887711387178e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "e98611c4-7156-5a3c-9efb-4ec093399d54",
+                "output_info": {
+                  "minimum_cutoff": 1.0317395880146027e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "69c873b4-cf0d-57ca-9e51-a3f1260d48f3",
+                "output_info": {
+                  "minimum_cutoff": 7.563831360912797e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "756640f4-9103-5b4d-9db1-9b244b1d75a4",
+                "output_info": {
+                  "minimum_cutoff": 1.024094119088655e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              48.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "2656a079-3f21-5038-b571-16386ef77125",
+                "output_info": {
+                  "minimum_cutoff": 9.003078772508239e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "f9e57221-ab9d-5508-8fec-8933d0d9d17c",
+                "output_info": {
+                  "minimum_cutoff": 9.304011330907868e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -684.23,
+              -770.96,
+              54.11
+            ],
+            "ray_target": [
+              -45.0285031181794,
+              -1.9206990640595905,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "d1a33520-9a3f-5a01-ad18-27d5e6b2b4e7",
+                "output_info": {
+                  "minimum_cutoff": 7.325741463481599e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 15
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              30.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "ee0af45e-b5fc-58a2-ad5a-0b2bde584d7a",
+                "output_info": {
+                  "minimum_cutoff": 9.07854696420884e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              33.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "dc42aab1-a701-5132-9347-3eb43db8005a",
+                "output_info": {
+                  "minimum_cutoff": 1.014689737105657e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "110a1b9c-a0d1-5ac9-931f-870bc6b3dcff",
+                "output_info": {
+                  "minimum_cutoff": 1.0022809691545357e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 18
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "67007e4e-6412-59bb-b8cf-0605f96087a3",
+                "output_info": {
+                  "minimum_cutoff": 9.927481719080195e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 19
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "d3ab9ac2-e0c2-56fa-a35d-150a991f58fa",
+                "output_info": {
+                  "minimum_cutoff": 1.005252247265049e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "4e93b437-626c-5b49-9baa-224767dd9137",
+                "output_info": {
+                  "minimum_cutoff": 1.0714358402283402e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 21
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              36.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "69e972b5-2d12-5a8b-8b46-92da39f730e5",
+                "output_info": {
+                  "minimum_cutoff": 9.875337482297754e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 22
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "367e9e79-6038-5991-83e9-6b5bea365561",
+                "output_info": {
+                  "minimum_cutoff": 1.019919974439638e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "a4e844b3-f7cf-5a45-9a9e-f14f2ef94630",
+                "output_info": {
+                  "minimum_cutoff": 8.462870279839159e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 24
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "2c7d8137-c73e-5f49-a081-9cbe37efb521",
+                "output_info": {
+                  "minimum_cutoff": 9.706917313706083e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 25
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              39.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "16c056d3-5d1d-5e80-b6cd-f1836d1a70da",
+                "output_info": {
+                  "minimum_cutoff": 8.026934603672456e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 26
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "92dc1f99-cd9a-589e-a683-243ce6439969",
+                "output_info": {
+                  "minimum_cutoff": 7.847878445368672e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "7784ac1a-46d4-5e60-9b9d-1142c8985f2f",
+                "output_info": {
+                  "minimum_cutoff": 8.782801750493004e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "5a7f5d98-e321-5852-a13f-f729a96aac37",
+                "output_info": {
+                  "minimum_cutoff": 9.546222121196172e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 29
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "caa77f62-e768-51ed-a4c7-69a51469190b",
+                "output_info": {
+                  "minimum_cutoff": 7.313922240438993e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 30
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              42.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "e824c3fd-c281-5ae3-84fe-9ba828220daa",
+                "output_info": {
+                  "minimum_cutoff": 1.0268411944672365e-06,
+                  "output_file_idx": 2,
+                  "idx_in_output": 31
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "aa96680a-8987-5158-a974-596fa97d3a91",
+                "output_info": {
+                  "minimum_cutoff": 7.587856739037075e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "94e05774-df87-596c-92ea-4fec938781e7",
+                "output_info": {
+                  "minimum_cutoff": 8.068739432046526e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 33
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "204faf82-caf3-578a-bd18-50824e4d6a7f",
+                "output_info": {
+                  "minimum_cutoff": 7.792949315775448e-07,
+                  "output_file_idx": 2,
+                  "idx_in_output": 34
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "300da24b-a34f-5bc2-971a-571fc611f01f",
+                "output_info": {
+                  "minimum_cutoff": 7.475373619902545e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              45.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "a1982611-a879-50a5-8a49-86d9120d40e0",
+                "output_info": {
+                  "minimum_cutoff": 9.824613774296055e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "a39952ca-5d3a-59b7-bb74-c2a9155b7ec3",
+                "output_info": {
+                  "minimum_cutoff": 7.207094763332608e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "b0fa73af-530a-5c15-b8ae-c45aa7c12efb",
+                "output_info": {
+                  "minimum_cutoff": 9.478069622134034e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 3
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              48.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "26563427-63c1-57a0-adaa-d3bd38bce9a6",
+                "output_info": {
+                  "minimum_cutoff": 7.145625258158448e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "7ea88f82-b9ed-5402-9bca-0764a8e404e6",
+                "output_info": {
+                  "minimum_cutoff": 9.574191717843774e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 5
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "8ce470ba-7d60-5eda-bf92-5521ed7f5355",
+                "output_info": {
+                  "minimum_cutoff": 7.343795956033766e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -681.93,
+              -772.89,
+              51.11
+            ],
+            "ray_target": [
+              -42.72850311817933,
+              -3.8506990640595404,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "b5ec5148-3267-55b4-8529-bc08e199ec88",
+                "output_info": {
+                  "minimum_cutoff": 8.623915934865289e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 7
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "4a4f6f98-16d3-5c2e-879f-acf95c49577f",
+                "output_info": {
+                  "minimum_cutoff": 8.949560861424778e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              30.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "bd932280-2a1f-58bd-9cfd-56c77253e5ae",
+                "output_info": {
+                  "minimum_cutoff": 9.033798398366529e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "45e93dbd-2d6f-5f70-9456-327af5d2bc90",
+                "output_info": {
+                  "minimum_cutoff": 1.0888626671573798e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "369e9288-30c4-5176-b0bf-23dae2a91b8d",
+                "output_info": {
+                  "minimum_cutoff": 1.0513015908523134e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 11
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              33.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "ef61b804-de18-5788-972e-2eb679eeb220",
+                "output_info": {
+                  "minimum_cutoff": 9.898526885896825e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 12
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "027ba80a-6275-5334-a822-9ad9ce312d80",
+                "output_info": {
+                  "minimum_cutoff": 8.969616566410368e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "08ec1632-090c-5f01-bab5-6a802b94e658",
+                "output_info": {
+                  "minimum_cutoff": 1.016951325492587e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              36.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "6f9ea91d-694d-51cc-ae32-04d18146dc2f",
+                "output_info": {
+                  "minimum_cutoff": 7.668722334047009e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 15
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "ef1db45e-d5ce-5c3b-a249-2ac5f844dd3d",
+                "output_info": {
+                  "minimum_cutoff": 9.52632439069859e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              39.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "3956d52a-7cbd-5072-86ea-884ea1232f81",
+                "output_info": {
+                  "minimum_cutoff": 1.063170193281392e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "2889d1a1-0991-51b4-bae3-2b80dff8903b",
+                "output_info": {
+                  "minimum_cutoff": 7.964228316382377e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 18
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "d3f0d845-3f36-50ef-8462-e2908c44bf2a",
+                "output_info": {
+                  "minimum_cutoff": 9.25546167245208e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              42.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "6fad46e9-c910-5c9d-8062-4ed6ce32ac51",
+                "output_info": {
+                  "minimum_cutoff": 9.510927564816595e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "58581a07-dbe0-537e-beb5-108e69ab5413",
+                "output_info": {
+                  "minimum_cutoff": 7.648436259074735e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 21
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "cb1b0ead-e840-5ff7-b45a-63e268de6b8e",
+                "output_info": {
+                  "minimum_cutoff": 9.702001515308343e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 22
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              45.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "2a4fc625-b434-5830-930e-69669d1048ac",
+                "output_info": {
+                  "minimum_cutoff": 9.079250752115895e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "487c71d1-fd1a-5611-a8d0-62837ca0e58e",
+                "output_info": {
+                  "minimum_cutoff": 1.0177057769690766e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 24
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "42336631-0df1-50c8-981f-f0338e09dc4f",
+                "output_info": {
+                  "minimum_cutoff": 8.761337362808103e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "b8bb01f3-de2d-5428-9c82-1d410f1c7d08",
+                "output_info": {
+                  "minimum_cutoff": 1.0109993860227683e-06,
+                  "output_file_idx": 3,
+                  "idx_in_output": 26
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              48.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "3af164cd-719d-5d9b-8819-b30ad6df3870",
+                "output_info": {
+                  "minimum_cutoff": 9.513727133860486e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "e54f42e7-0ae2-54f6-b4f0-996a55953583",
+                "output_info": {
+                  "minimum_cutoff": 9.686452165162402e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "46186b9e-31a6-56b6-86c4-c680ef42c611",
+                "output_info": {
+                  "minimum_cutoff": 7.239548650136159e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 29
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "ca20974b-31b5-5e9d-84d6-c7d812ba2576",
+                "output_info": {
+                  "minimum_cutoff": 8.659194995090276e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 30
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "679401e2-590e-5504-bd84-e9878aa9e6e1",
+                "output_info": {
+                  "minimum_cutoff": 8.934214122625276e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 31
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              51.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "100852db-9369-54cc-9d53-3bfbf7e7be3a",
+                "output_info": {
+                  "minimum_cutoff": 8.177989170628235e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "35d294ab-484b-51b3-a896-d849a08f6623",
+                "output_info": {
+                  "minimum_cutoff": 9.898773561987136e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 33
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "4730e188-f987-56ce-9fcb-8a3f54f86aeb",
+                "output_info": {
+                  "minimum_cutoff": 9.58121748511156e-07,
+                  "output_file_idx": 3,
+                  "idx_in_output": 34
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -679.63,
+              -774.82,
+              54.11
+            ],
+            "ray_target": [
+              -40.42850311817938,
+              -5.780699064059604,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "2c42d822-bfef-5727-9dd0-60c1ea9a9095",
+                "output_info": {
+                  "minimum_cutoff": 7.374879543118286e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              30.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "8741a487-50e9-579e-986c-9f9cbb02571d",
+                "output_info": {
+                  "minimum_cutoff": 8.836603069409787e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "33240814-043d-536d-8554-c26e4d63315c",
+                "output_info": {
+                  "minimum_cutoff": 1.1428209571425044e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "a56a90c6-c04d-5cd4-8211-44b11d7bc362",
+                "output_info": {
+                  "minimum_cutoff": 9.740623414042926e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 3
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              39.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "6d6b6fc9-fe3b-587a-b7bd-cc2e99b3290b",
+                "output_info": {
+                  "minimum_cutoff": 1.0127649328149741e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "aa9d4c5e-f3e1-57a4-88a5-e0e3cae45f1c",
+                "output_info": {
+                  "minimum_cutoff": 1.0995434932476287e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 5
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              42.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "2a778e30-525f-5249-8b11-583471583c64",
+                "output_info": {
+                  "minimum_cutoff": 8.423553485953043e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              45.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "af2222c6-dc5a-5b96-b1ae-5c8179eecf63",
+                "output_info": {
+                  "minimum_cutoff": 9.71590661384224e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              48.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "aa6d2327-9964-58ae-a6d1-8c182f576a9b",
+                "output_info": {
+                  "minimum_cutoff": 7.318437628413064e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              51.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "b3b79d06-29e1-558a-9deb-40d6e78df8a9",
+                "output_info": {
+                  "minimum_cutoff": 1.060420206254324e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "f0117198-133d-5eaf-a2ef-04c0eafce09b",
+                "output_info": {
+                  "minimum_cutoff": 8.319156632549379e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "615d9620-eb89-5d7d-8d28-c09cb19540b1",
+                "output_info": {
+                  "minimum_cutoff": 7.501805840922729e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "aed90c1d-2493-564f-ad60-a0caa4ed36f3",
+                "output_info": {
+                  "minimum_cutoff": 9.37403392010889e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              54.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "753bc247-7c07-5b93-9e64-c51b82cd7dd8",
+                "output_info": {
+                  "minimum_cutoff": 6.94959479708378e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "a8eacac5-7980-5abf-8f82-96d19d5849df",
+                "output_info": {
+                  "minimum_cutoff": 7.684262579071169e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -677.33,
+              -776.74,
+              60.11
+            ],
+            "ray_target": [
+              -38.128503118179424,
+              -7.700699064059563,
+              60.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "6ed96483-b066-5a03-941d-a2711ef99e60",
+                "output_info": {
+                  "minimum_cutoff": 9.689672294850375e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 15
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              30.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "dd4ca804-e2d0-52cd-af5b-c5679b664696",
+                "output_info": {
+                  "minimum_cutoff": 8.447695458359014e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 16
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "d834371d-085d-5f7b-a7d6-5ecdab891ed4",
+                "output_info": {
+                  "minimum_cutoff": 1.1590869197112647e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "0cd5f420-e912-5db5-8f8d-2cd48a2800ac",
+                "output_info": {
+                  "minimum_cutoff": 1.2877418161360337e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 18
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              33.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "c9aeb02a-16aa-5b27-88f0-a761326029a8",
+                "output_info": {
+                  "minimum_cutoff": 1.0822663340560857e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              39.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "553af3ce-76a9-5c38-bada-e459553ce96a",
+                "output_info": {
+                  "minimum_cutoff": 1.0684921071635062e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 20
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              42.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "0363be8d-5e89-5613-826c-f88927cf655e",
+                "output_info": {
+                  "minimum_cutoff": 7.673246135423772e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 21
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "232ebf5a-2e27-55b9-81c2-273b72826dcb",
+                "output_info": {
+                  "minimum_cutoff": 9.741818570457625e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 22
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              45.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "bf28f94f-6879-5652-846e-58f6a419f090",
+                "output_info": {
+                  "minimum_cutoff": 1.2284188091580414e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 23
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              48.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 49.5354,
+                "beamlet_uuid": "f87f4337-c990-599d-8308-329a7a0b933a",
+                "output_info": {
+                  "minimum_cutoff": 8.360435349019233e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 24
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              51.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "0a39ed16-8823-585d-8a54-9a82b08ef402",
+                "output_info": {
+                  "minimum_cutoff": 8.119421411754902e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "9caff646-340a-56b0-be5a-a3edc0c4bebc",
+                "output_info": {
+                  "minimum_cutoff": 8.886143851211918e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 26
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -675.03,
+              -778.67,
+              54.11
+            ],
+            "ray_target": [
+              -35.828503118179356,
+              -9.630699064059513,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "efcc2eb1-8d40-5ecc-811d-553ad9d283dc",
+                "output_info": {
+                  "minimum_cutoff": 8.015890699618414e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "639259fb-e06d-5a36-b1da-8c7a1726a40a",
+                "output_info": {
+                  "minimum_cutoff": 8.693569150543919e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "0db8aba7-ac5a-598a-8634-d226e01c7d85",
+                "output_info": {
+                  "minimum_cutoff": 8.16099249790066e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 29
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              30.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "3fd24c21-7b98-5293-a5a2-cc13ed16fcf1",
+                "output_info": {
+                  "minimum_cutoff": 1.270933482367583e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 30
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "eec7e877-7f40-5d2a-8de4-2546fd5a820c",
+                "output_info": {
+                  "minimum_cutoff": 9.023912808121934e-07,
+                  "output_file_idx": 4,
+                  "idx_in_output": 31
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "cf9976cd-6753-5d98-a65a-05bcb286093c",
+                "output_info": {
+                  "minimum_cutoff": 1.2472339833534393e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "1cc0a2c1-4560-5501-abbb-356d19e27e6c",
+                "output_info": {
+                  "minimum_cutoff": 1.2504092908337739e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 33
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              33.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "0a8b8070-03d7-5403-bd46-d326ecfa6b40",
+                "output_info": {
+                  "minimum_cutoff": 1.0646863877796466e-06,
+                  "output_file_idx": 4,
+                  "idx_in_output": 34
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              36.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "a5997fd3-d71e-5bbc-aced-7c1ac44f853c",
+                "output_info": {
+                  "minimum_cutoff": 8.20475898407972e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              42.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "e382c21a-e31f-5fba-8b06-be84491c833e",
+                "output_info": {
+                  "minimum_cutoff": 9.220897188026664e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "bbcc055a-7a56-5182-b70e-e67e2adf2bf2",
+                "output_info": {
+                  "minimum_cutoff": 1.3120680119483667e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 2
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              45.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "98fa9888-d1ce-50d7-91e6-c6ee8ca8ae8e",
+                "output_info": {
+                  "minimum_cutoff": 1.1529033162045241e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 3
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "db8ab5dc-be86-5057-a493-b3121460f434",
+                "output_info": {
+                  "minimum_cutoff": 9.571002791013193e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 4
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              48.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "2cd69d1f-a536-5704-89a2-8b0d1ce609cf",
+                "output_info": {
+                  "minimum_cutoff": 1.0472860011848277e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 5
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              51.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "6605ecc6-1fd4-5cbd-8f94-b75be9584e2b",
+                "output_info": {
+                  "minimum_cutoff": 9.856464825971616e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 6
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "1f3b1adf-f9f5-523c-b880-10b1d722b17a",
+                "output_info": {
+                  "minimum_cutoff": 9.823452827254573e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              54.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "4dd1aff9-50a9-50ad-94ef-e4084a0f8aa4",
+                "output_info": {
+                  "minimum_cutoff": 7.769335969937731e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -672.74,
+              -780.6,
+              60.11
+            ],
+            "ray_target": [
+              -33.53850311817939,
+              -11.560699064059577,
+              60.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "26b06d35-b137-5246-acff-865f640a98e1",
+                "output_info": {
+                  "minimum_cutoff": 1.078961052125776e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 9
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              30.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "33ffd35f-7b2b-596f-8ff1-74bf67866b21",
+                "output_info": {
+                  "minimum_cutoff": 9.221377283476138e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "72b3e668-2687-5256-b15c-09a3d80c4f09",
+                "output_info": {
+                  "minimum_cutoff": 1.176451073819782e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "e72fdec1-08cc-53f6-9e6d-418d744d1c5a",
+                "output_info": {
+                  "minimum_cutoff": 1.312071734151873e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              33.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "40141185-c783-53ca-bb35-b4d47d9862e8",
+                "output_info": {
+                  "minimum_cutoff": 8.617546535792108e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "0673c301-3f66-5d7e-80c3-09fc99ea5a70",
+                "output_info": {
+                  "minimum_cutoff": 9.696811383085072e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              42.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "8a603e01-da97-5ae6-8f5c-a39049c22e76",
+                "output_info": {
+                  "minimum_cutoff": 8.847329976312047e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 15
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "c71ef6ab-1c3f-5045-ab93-98d12ef4ce59",
+                "output_info": {
+                  "minimum_cutoff": 1.0413111651491583e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              45.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "5a722fab-fccd-57d4-97f9-8e53c84109ff",
+                "output_info": {
+                  "minimum_cutoff": 1.2154990541502603e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "6d79825d-0bed-50b2-9eaa-ead86351d809",
+                "output_info": {
+                  "minimum_cutoff": 1.3312353448981975e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 18
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              48.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "c0b4f7ba-9ebd-5a6e-9664-f1b514946f04",
+                "output_info": {
+                  "minimum_cutoff": 9.207374802068624e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              51.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "41c561c8-4e65-52af-9fec-6dab4f513afd",
+                "output_info": {
+                  "minimum_cutoff": 9.080105292765479e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "fded745f-508c-5928-b48b-cf706bd0ff61",
+                "output_info": {
+                  "minimum_cutoff": 9.021632165397171e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 21
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              54.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "96206431-1f48-5667-83c3-9e55ad678f9d",
+                "output_info": {
+                  "minimum_cutoff": 1.0719872531014624e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 22
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              57.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              57.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "53407e42-4014-5924-b53a-1907469ebabb",
+                "output_info": {
+                  "minimum_cutoff": 8.957073959604057e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 23
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -670.44,
+              -782.53,
+              60.11
+            ],
+            "ray_target": [
+              -31.238503118179437,
+              -13.490699064059527,
+              60.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "08cf6b26-5648-553f-8bda-915f223e6846",
+                "output_info": {
+                  "minimum_cutoff": 9.845909604053242e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 24
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              30.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              30.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "40c70103-7e94-5fe7-b143-c2155836b162",
+                "output_info": {
+                  "minimum_cutoff": 9.662990482196518e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "0dd81f76-3130-527f-851b-53a282a2f155",
+                "output_info": {
+                  "minimum_cutoff": 1.3278719887070278e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 26
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              33.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "a0ed9b18-04a6-5fbd-95e0-14366547d429",
+                "output_info": {
+                  "minimum_cutoff": 9.366754210335678e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "369083f5-31a1-58c2-b412-37bb1418292b",
+                "output_info": {
+                  "minimum_cutoff": 1.123867923380067e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 28
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              45.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "1cf698f5-8c05-5d86-9a5d-1e448a954058",
+                "output_info": {
+                  "minimum_cutoff": 1.0699516902243765e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 29
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "3046298d-5800-5cbf-90f9-4d85c0491791",
+                "output_info": {
+                  "minimum_cutoff": 9.477736428885262e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 30
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              48.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "30c94f41-d1da-5780-ac3c-b46d522faf6f",
+                "output_info": {
+                  "minimum_cutoff": 8.912863117946656e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 31
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              51.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "34c826e3-65a1-5954-90ca-133f60d473cc",
+                "output_info": {
+                  "minimum_cutoff": 1.070045568539518e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "eabc4097-bd77-5fa6-833f-bd3821a04489",
+                "output_info": {
+                  "minimum_cutoff": 1.2069692204950977e-06,
+                  "output_file_idx": 5,
+                  "idx_in_output": 33
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              57.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              57.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "e592bee4-7482-5d31-a7ac-0c5874bb67f9",
+                "output_info": {
+                  "minimum_cutoff": 9.056328051124569e-07,
+                  "output_file_idx": 5,
+                  "idx_in_output": 34
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -668.14,
+              -784.46,
+              60.11
+            ],
+            "ray_target": [
+              -28.93850311817937,
+              -15.42069906405959,
+              60.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "df30cf58-805e-5907-b9be-3d953cbcff9a",
+                "output_info": {
+                  "minimum_cutoff": 9.569554677507099e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -665.84,
+              -786.39,
+              33.11
+            ],
+            "ray_target": [
+              -26.638503118179415,
+              -17.35069906405954,
+              33.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "b3e575c3-1d7b-5aec-aff1-f21041a99586",
+                "output_info": {
+                  "minimum_cutoff": 9.068787569425782e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 1
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -665.84,
+              -786.39,
+              51.11
+            ],
+            "ray_target": [
+              -26.638503118179415,
+              -17.35069906405954,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "0de48bd0-4b20-5427-ada4-3a60faf3a930",
+                "output_info": {
+                  "minimum_cutoff": 9.91017179687313e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 2
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              36.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "77719306-e00b-5056-9975-0a6d456d0342",
+                "output_info": {
+                  "minimum_cutoff": 8.823003163393292e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 3
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "bf60f7df-c3de-592a-829e-5e3cef333be9",
+                "output_info": {
+                  "minimum_cutoff": 1.0713316895525586e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 4
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              39.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "93d608fc-aeb9-5e4d-ac56-a1c5a10d6233",
+                "output_info": {
+                  "minimum_cutoff": 9.318787436260017e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 5
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              42.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "4000607f-1893-5f23-aa6c-c9c37f83ba52",
+                "output_info": {
+                  "minimum_cutoff": 1.2312446766943671e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              48.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "4f78bf52-76e3-505f-a72a-03b84a833b18",
+                "output_info": {
+                  "minimum_cutoff": 1.16683419441385e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              51.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 53.2453,
+                "beamlet_uuid": "864300b8-5659-5466-a476-d5ef228e32d2",
+                "output_info": {
+                  "minimum_cutoff": 7.900201474300765e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              54.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "96165a0e-5fb4-55d2-93f5-a8929f417531",
+                "output_info": {
+                  "minimum_cutoff": 8.913514614814705e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 9
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -663.54,
+              -788.31,
+              57.11
+            ],
+            "ray_target": [
+              -24.338503118179347,
+              -19.2706990640595,
+              57.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "c73e30a0-399c-53b7-bdd2-b96adb36bada",
+                "output_info": {
+                  "minimum_cutoff": 7.749757936468223e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 10
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              36.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              36.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "b80ea272-09e0-5e4e-bf9d-bb3310881f2b",
+                "output_info": {
+                  "minimum_cutoff": 1.0310908655520588e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "83a4bbe8-3537-5e50-8bf6-ac737906eb9d",
+                "output_info": {
+                  "minimum_cutoff": 9.942259884925272e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 12
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "ecc2fc76-9111-5b81-8e9e-ceda7bee3ebc",
+                "output_info": {
+                  "minimum_cutoff": 8.56852993475324e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "18a270b8-6d67-5d17-897c-cbcf2ce99149",
+                "output_info": {
+                  "minimum_cutoff": 1.170066821192385e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              39.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              39.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "8257db2c-4e3d-5236-ae57-458cd791c7e2",
+                "output_info": {
+                  "minimum_cutoff": 8.527763376270471e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 15
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "d86c781f-7129-5f7a-a46e-0816dce71f43",
+                "output_info": {
+                  "minimum_cutoff": 1.0427972989068734e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 16
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "189f997d-ab48-5d82-978f-e15e4f673123",
+                "output_info": {
+                  "minimum_cutoff": 9.636241398407636e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "7faaface-532c-5c63-bcf1-ea11c66a9b7a",
+                "output_info": {
+                  "minimum_cutoff": 8.876248323734e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 18
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "de13e192-3d86-5ab8-92e4-bd34ce8b2233",
+                "output_info": {
+                  "minimum_cutoff": 1.227022359549776e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 19
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "9a912659-f1b0-509d-947b-beefb8b0e020",
+                "output_info": {
+                  "minimum_cutoff": 1.2240084975552158e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 20
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              42.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              42.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "aa129c5e-84c3-5109-8d96-32bd4fa55093",
+                "output_info": {
+                  "minimum_cutoff": 8.350098233765479e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 21
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "5176742c-f26a-5eb2-9a93-d20c20551279",
+                "output_info": {
+                  "minimum_cutoff": 1.066273322910494e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 22
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "4b348d4b-0022-503c-a7d7-1307a12365dc",
+                "output_info": {
+                  "minimum_cutoff": 7.520522379282431e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "072fa550-c711-576c-9255-55cf4f7fec89",
+                "output_info": {
+                  "minimum_cutoff": 1.036924229048123e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 24
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "11c4d922-ade7-571a-91da-e4781386642a",
+                "output_info": {
+                  "minimum_cutoff": 9.702897938817244e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 25
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              45.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              45.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "ac8efe87-866b-5d91-8d51-80a74e886e80",
+                "output_info": {
+                  "minimum_cutoff": 9.96509105083073e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 26
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "64e50c75-8e8c-54ac-b600-f201201aee1f",
+                "output_info": {
+                  "minimum_cutoff": 8.639451208872142e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "4cd7aa06-2f91-5cf3-8e24-eb583dc6c72c",
+                "output_info": {
+                  "minimum_cutoff": 1.1511626560933485e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 28
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              48.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "99d86e99-0a1b-5a9a-9b21-b8319fa6f6a6",
+                "output_info": {
+                  "minimum_cutoff": 7.672900571247211e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 29
+                }
+              },
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "53cf1345-c14b-51a2-990f-116612356876",
+                "output_info": {
+                  "minimum_cutoff": 8.124573456373835e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 30
+                }
+              },
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "8353b664-73bd-5a41-8ffc-b67baa5f40cf",
+                "output_info": {
+                  "minimum_cutoff": 9.562308493420421e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 31
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              51.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "9ad78ccc-e832-5333-b8bd-f52ccb474c00",
+                "output_info": {
+                  "minimum_cutoff": 7.801194513953342e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 32
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "d3a3198f-7ba7-5c15-8913-d97163c552d5",
+                "output_info": {
+                  "minimum_cutoff": 1.0520664662913202e-06,
+                  "output_file_idx": 6,
+                  "idx_in_output": 33
+                }
+              },
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "1f36072e-1dc7-5a35-816a-b9f217c51d37",
+                "output_info": {
+                  "minimum_cutoff": 8.163734678178853e-07,
+                  "output_file_idx": 6,
+                  "idx_in_output": 34
+                }
+              },
+              {
+                "energy": 69.4389,
+                "beamlet_uuid": "cd4fdbfa-0e62-5d68-896a-fa77a03b0688",
+                "output_info": {
+                  "minimum_cutoff": 7.440156923239471e-07,
+                  "output_file_idx": 7,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -661.24,
+              -790.24,
+              54.11
+            ],
+            "ray_target": [
+              -22.038503118179392,
+              -21.200699064059563,
+              54.11
+            ],
+            "beamlets": [
+              {
+                "energy": 56.7659,
+                "beamlet_uuid": "bdf19a0e-3ff0-5457-999b-1440857226b4",
+                "output_info": {
+                  "minimum_cutoff": 8.467778429127889e-07,
+                  "output_file_idx": 7,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 60.1259,
+                "beamlet_uuid": "4885efd2-498a-5b44-8347-ef4fee69d8cb",
+                "output_info": {
+                  "minimum_cutoff": 7.407400315742053e-07,
+                  "output_file_idx": 7,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "b51393b6-1fb4-5361-a120-3bf4290c18dc",
+                "output_info": {
+                  "minimum_cutoff": 1.020277304444024e-06,
+                  "output_file_idx": 7,
+                  "idx_in_output": 3
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -658.95,
+              -792.17,
+              48.11
+            ],
+            "ray_target": [
+              -19.74850311817943,
+              -23.130699064059513,
+              48.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "bd8887f8-6596-53ca-9c53-36eab87b082a",
+                "output_info": {
+                  "minimum_cutoff": 7.673605646201933e-07,
+                  "output_file_idx": 7,
+                  "idx_in_output": 4
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -658.95,
+              -792.17,
+              51.11
+            ],
+            "ray_target": [
+              -19.74850311817943,
+              -23.130699064059513,
+              51.11
+            ],
+            "beamlets": [
+              {
+                "energy": 63.3471,
+                "beamlet_uuid": "3bcd80e6-2e11-54ac-89ed-6255f580bb1d",
+                "output_info": {
+                  "minimum_cutoff": 1.0669901569475342e-06,
+                  "output_file_idx": 7,
+                  "idx_in_output": 5
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "image_file_idx": 0,
+    "anatomical_region": "abdominal"
+  },
+  {
+    "iso_center": [
+      -76.9529,
+      63.1254,
+      35.1132
+    ],
+    "beams": [
+      {
+        "gantry_angle": 270.0,
+        "rays": [
+          {
+            "ray_source": [
+              -1076.95,
+              69.13,
+              35.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              69.13,
+              35.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "5a577391-3ef0-51bc-af46-dce11bd641eb",
+                "output_info": {
+                  "minimum_cutoff": 1.0421139738473014e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              20.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              20.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "7faa9c72-70b0-5d1a-8746-10aad650bb28",
+                "output_info": {
+                  "minimum_cutoff": 8.451192971030385e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "784a9c85-c8ef-5331-bcd3-7acac7cb75ac",
+                "output_info": {
+                  "minimum_cutoff": 1.0501356518339825e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 2
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "14f21cc1-5cc0-5dba-9b50-26aedd33bcb2",
+                "output_info": {
+                  "minimum_cutoff": 1.0480403841649323e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 3
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              23.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              23.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "80f5862d-aabc-5e57-84cd-4b1254ddd121",
+                "output_info": {
+                  "minimum_cutoff": 9.373652493537203e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "3391b0d8-8ea2-568c-8a32-a4f1fa819da9",
+                "output_info": {
+                  "minimum_cutoff": 1.0617096343758107e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 5
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "ce4d56c5-99dd-591a-bbd0-09e1d9a45202",
+                "output_info": {
+                  "minimum_cutoff": 1.2566009433499746e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 6
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              26.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              26.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "a703b251-726c-56ce-917d-e4183ea19c7a",
+                "output_info": {
+                  "minimum_cutoff": 1.2565996246603474e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              29.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              29.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "465fb32a-8f5a-5382-8049-21b27450d934",
+                "output_info": {
+                  "minimum_cutoff": 1.028703749850745e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 8
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              32.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              32.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "7ee18d36-29f7-55e3-933b-40b4e2749a92",
+                "output_info": {
+                  "minimum_cutoff": 1.326969749247799e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 9
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "93a392a2-5e94-50ed-b510-844f810b93ff",
+                "output_info": {
+                  "minimum_cutoff": 1.0124404812444573e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 10
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              35.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              35.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "7925ad0d-7d72-5da7-be44-0d61fb2b06b2",
+                "output_info": {
+                  "minimum_cutoff": 9.255430466773394e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 11
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "d1a586be-7291-53bf-9b5d-628802c4959e",
+                "output_info": {
+                  "minimum_cutoff": 9.787421946177873e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              38.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              38.11
+            ],
+            "beamlets": [
+              {
+                "energy": 66.4468,
+                "beamlet_uuid": "46cb30b2-6efd-507b-ab8d-022e7e560075",
+                "output_info": {
+                  "minimum_cutoff": 1.17038352041635e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 13
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "b75f1622-986b-5432-bd5b-d15f226f07f9",
+                "output_info": {
+                  "minimum_cutoff": 1.181629700798174e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 14
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              66.13,
+              50.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              66.13,
+              50.11
+            ],
+            "beamlets": [
+              {
+                "energy": 75.1442,
+                "beamlet_uuid": "42a07faa-9b64-580f-a24c-a0744c4a4944",
+                "output_info": {
+                  "minimum_cutoff": 1.1041194502662442e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 15
+                }
+              },
+              {
+                "energy": 77.8749,
+                "beamlet_uuid": "3f4df0a3-0b84-57c8-94fe-c53098c5c9b4",
+                "output_info": {
+                  "minimum_cutoff": 1.1381543959638867e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              20.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              20.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "73e468b7-362f-5705-8c96-f6eb969229b6",
+                "output_info": {
+                  "minimum_cutoff": 1.2362833372654607e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "ebb3cbb4-499a-5860-9857-a88a5f41bc2d",
+                "output_info": {
+                  "minimum_cutoff": 9.642632707725112e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 18
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "1809ff31-8fa8-5a0e-a090-9c7cbd5ff829",
+                "output_info": {
+                  "minimum_cutoff": 9.634370312372835e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              23.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              23.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "c54a6ed9-1cc2-5867-82a1-4e3ff6423a67",
+                "output_info": {
+                  "minimum_cutoff": 1.0654903131328551e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "2056bc5b-ea16-51b8-aba0-f700c5531cc1",
+                "output_info": {
+                  "minimum_cutoff": 9.670812389202686e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 21
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "871ab33b-dd45-569d-ac2d-491a0a5e1b07",
+                "output_info": {
+                  "minimum_cutoff": 1.3456628040221845e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 22
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              26.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              26.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "7933c72e-2c04-5462-a34c-6784279b917d",
+                "output_info": {
+                  "minimum_cutoff": 1.3439359276520785e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "b542cf65-729e-5f71-8e91-087b0a018435",
+                "output_info": {
+                  "minimum_cutoff": 1.1689121927066784e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 24
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              32.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              32.11
+            ],
+            "beamlets": [
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "3fd2c445-71de-5954-b8bb-386317f05b1c",
+                "output_info": {
+                  "minimum_cutoff": 9.762667009967481e-07,
+                  "output_file_idx": 8,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "3b35642f-0b0d-5ce2-82e8-a7e0544e2599",
+                "output_info": {
+                  "minimum_cutoff": 1.3083456537430477e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 26
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              35.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              35.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "de90c4ca-6cf8-5731-b672-f840507bca2f",
+                "output_info": {
+                  "minimum_cutoff": 1.2075441122884353e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "54c90f0e-fa2d-5eff-9e9f-3a2d25574a86",
+                "output_info": {
+                  "minimum_cutoff": 1.1969301479776943e-06,
+                  "output_file_idx": 8,
+                  "idx_in_output": 28
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "664b95f9-3df2-5f70-aa44-c0349b1507df",
+                "output_info": {
+                  "minimum_cutoff": 1.104631891558964e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 0
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              38.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              38.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "f81f5dbc-f740-5cc2-add7-89669195d006",
+                "output_info": {
+                  "minimum_cutoff": 1.053282600351555e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 1
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "8497e7d4-6cb9-5f80-ae8c-43b629b67c93",
+                "output_info": {
+                  "minimum_cutoff": 9.678721033795188e-07,
+                  "output_file_idx": 9,
+                  "idx_in_output": 2
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              63.13,
+              50.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              63.13,
+              50.11
+            ],
+            "beamlets": [
+              {
+                "energy": 72.3349,
+                "beamlet_uuid": "7e054de3-c29e-510c-b553-f5955070e3e9",
+                "output_info": {
+                  "minimum_cutoff": 9.332032214146847e-07,
+                  "output_file_idx": 9,
+                  "idx_in_output": 3
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              20.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              20.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "c5780e28-12ae-5ba4-8d19-d0c0bea21da5",
+                "output_info": {
+                  "minimum_cutoff": 1.2161268865083934e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 4
+                }
+              },
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "a88ec4a5-0166-5fc9-9563-00c7a4f0aa82",
+                "output_info": {
+                  "minimum_cutoff": 1.2786143702019318e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 5
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "17b4d04f-7a35-5e2a-8e49-57758c8981f0",
+                "output_info": {
+                  "minimum_cutoff": 1.130093856851427e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 6
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "785dc852-2109-5195-8bc9-61e7d345e2de",
+                "output_info": {
+                  "minimum_cutoff": 1.1795935454416354e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 7
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              23.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              23.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "012739ba-538f-5534-912c-554b08c7750f",
+                "output_info": {
+                  "minimum_cutoff": 1.0413541802541047e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 8
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "085befc3-c72e-5695-b650-b805d30c2d6f",
+                "output_info": {
+                  "minimum_cutoff": 1.3681745940217434e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 9
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              26.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              26.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "71ec9b76-2943-5e37-a1d0-4fa25601a0ee",
+                "output_info": {
+                  "minimum_cutoff": 1.3960531260676928e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 10
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "01c9c009-470a-5a1e-8fe8-2f3804aca512",
+                "output_info": {
+                  "minimum_cutoff": 1.2913646379744449e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 11
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              29.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              29.11
+            ],
+            "beamlets": [
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "28c42ac2-d57a-5844-a16f-53cb6fd354a2",
+                "output_info": {
+                  "minimum_cutoff": 1.2946542376943127e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 12
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              32.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              32.11
+            ],
+            "beamlets": [
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "88eaf6b4-ccad-5878-b50e-85c4d5cd433e",
+                "output_info": {
+                  "minimum_cutoff": 1.406096562034068e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 13
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              35.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              35.11
+            ],
+            "beamlets": [
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "492a8ff5-c6c0-5b91-a560-d317e407d528",
+                "output_info": {
+                  "minimum_cutoff": 1.0310395738785632e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 14
+                }
+              },
+              {
+                "energy": 95.2605,
+                "beamlet_uuid": "4072146a-c8c5-5ae8-a24c-045c719c0248",
+                "output_info": {
+                  "minimum_cutoff": 1.3275455663838784e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 15
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              38.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              38.11
+            ],
+            "beamlets": [
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "1ebe2b73-fbbe-554c-966a-cf245352e237",
+                "output_info": {
+                  "minimum_cutoff": 1.322811249005143e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 16
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              41.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              41.11
+            ],
+            "beamlets": [
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "60fa2229-2786-503b-8c11-f669a79bca8c",
+                "output_info": {
+                  "minimum_cutoff": 1.1809177475175076e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 17
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "ad24b86d-9455-51ef-9a63-4099582bc1f6",
+                "output_info": {
+                  "minimum_cutoff": 1.2448520447010797e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 18
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              47.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              47.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "fe9dfa06-44b1-5868-b460-16b1d286b3c8",
+                "output_info": {
+                  "minimum_cutoff": 8.735825385483019e-07,
+                  "output_file_idx": 9,
+                  "idx_in_output": 19
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              60.13,
+              50.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              60.13,
+              50.11
+            ],
+            "beamlets": [
+              {
+                "energy": 80.5337,
+                "beamlet_uuid": "c3a45ed9-775d-50f7-bd09-05303b0888f0",
+                "output_info": {
+                  "minimum_cutoff": 8.718461486471149e-07,
+                  "output_file_idx": 9,
+                  "idx_in_output": 20
+                }
+              },
+              {
+                "energy": 83.1266,
+                "beamlet_uuid": "ce4a14c5-ad30-5176-ac2d-ebf929725f56",
+                "output_info": {
+                  "minimum_cutoff": 1.2188621340357602e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 21
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              57.13,
+              20.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              57.13,
+              20.11
+            ],
+            "beamlets": [
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "1821bcc4-a54a-5d09-93a2-6859df92874c",
+                "output_info": {
+                  "minimum_cutoff": 1.2626048346984167e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 22
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "f114c48a-365c-52c7-9fd5-6651ffa57154",
+                "output_info": {
+                  "minimum_cutoff": 1.0567751862580462e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 23
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "48ff14a7-296a-5d18-8e80-1466ad96f243",
+                "output_info": {
+                  "minimum_cutoff": 1.2973549660363877e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 24
+                }
+              }
+            ]
+          },
+          {
+            "ray_source": [
+              -1076.95,
+              57.13,
+              23.11
+            ],
+            "ray_target": [
+              -76.95000000000005,
+              57.13,
+              23.11
+            ],
+            "beamlets": [
+              {
+                "energy": 85.6587,
+                "beamlet_uuid": "434b6a3a-214e-5e44-b0b2-2df638496588",
+                "output_info": {
+                  "minimum_cutoff": 1.3208223908155007e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 25
+                }
+              },
+              {
+                "energy": 88.1344,
+                "beamlet_uuid": "8f507dd8-6791-547f-a2f9-5fc3ea702eb6",
+                "output_info": {
+                  "minimum_cutoff": 9.69297518691805e-07,
+                  "output_file_idx": 9,
+                  "idx_in_output": 26
+                }
+              },
+              {
+                "energy": 90.5576,
+                "beamlet_uuid": "d5a54696-2f6a-501c-b0bf-47053ca3963f",
+                "output_info": {
+                  "minimum_cutoff": 1.3419048598646791e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 27
+                }
+              },
+              {
+                "energy": 92.9319,
+                "beamlet_uuid": "2e68459c-62a9-5800-999b-e547559d4658",
+                "output_info": {
+                  "minimum_cutoff": 1.2369768665534678e-06,
+                  "output_file_idx": 9,
+                  "idx_in_output": 28
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "image_file_idx": 1,
+    "anatomical_region": "abdominal"
+  }
+]
