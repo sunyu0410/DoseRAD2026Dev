@@ -1,0 +1,105 @@
+INFO:     Started server process [49]
+INFO:     Waiting for application startup.
+=+==+==+==+==+==+==+==+==+==+=
+Collecting Torch CUDA information
+Torch CUDA is available: True
+	number of devices: 1
+	current device: 0
+	properties: _CudaDeviceProperties(name='Tesla T4', major=7, minor=5, total_memory=15095MB, multi_processor_count=40, uuid=0a112bdf-4f4e-7732-f415-9ace3ded6996, pci_bus_id=0, pci_device_id=30, pci_domain_id=0, L2_cache_size=4MB)
+=+==+==+==+==+==+==+==+==+==+=
+Using device: cuda
+demo
+
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:4743 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60570 - "GET /health HTTP/1.1" 200 OK
+    input/
+        inputs.json
+        stacked-photon-beam-level-metadata.json
+        images/
+            radiation-dose-calculation-source-ct-image-9/
+                31f505f3-0a8e-4dfa-a336-f211ae21296c.mha
+            radiation-dose-calculation-source-ct-image-7/
+                5d8d9a83-43b6-4929-9e53-db1ee85803cf.mha
+            radiation-dose-calculation-source-ct-image-10/
+                5fe91095-a1e6-4721-b9d6-6106edcdffd7.mha
+            radiation-dose-calculation-source-ct-image-5/
+                af18633a-3a83-484e-94d5-e81b0b98c9a3.mha
+            radiation-dose-calculation-source-ct-image-2/
+                a07002d3-ac58-4c50-a0f8-d775fa90e1da.mha
+            radiation-dose-calculation-source-ct-image-4/
+                2e6c170e-efe5-4374-94c6-914cf523384f.mha
+            radiation-dose-calculation-source-ct-image-8/
+                42fbc248-da36-407f-9d80-2e46e57e77b3.mha
+            radiation-dose-calculation-source-ct-image-1/
+                e29adb12-c093-4082-82ba-820259880b35.mha
+            radiation-dose-calculation-source-ct-image-3/
+                4420a291-f620-445e-bfb3-ad3239fa347a.mha
+            radiation-dose-calculation-source-ct-image-6/
+                91b50fa8-fb18-4d7f-9838-88444fae8ae4.mha
+Running TASK 'proton-ct' (input_dir_base='radiation-dose-calculation-source-ct-image', input_json_name='stacked-proton-beam-level-metadata')
+Using device: cuda
+GPU detected: Tesla T4
+Loading json metadata:
+INFO:     127.0.0.1:60578 - "POST /invoke HTTP/1.1" 500 Internal Server Error
+Invoke endpoint returned status 500, expected 201
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 63, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 1281, in handle
+    await super().handle(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/routing.py", line 280, in handle
+    await self.app(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/user/.local/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/fastapi/routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/app/app.py", line 110, in invoke
+    inference.run(model)
+  File "/opt/app/inference.py", line 70, in run
+    metadata = load_json_file(INPUT_PATH / f"{INPUT_JSON_NAME}.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/app/inference.py", line 174, in load_json_file
+    with open(location) as f:
+         ^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/input/stacked-proton-beam-level-metadata.json'
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [49]
