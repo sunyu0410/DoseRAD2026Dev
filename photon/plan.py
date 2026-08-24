@@ -3,8 +3,10 @@ from pathlib import Path
 import json
 from collections import OrderedDict as odict
 
+
 def get_body_mask(img_sitk, thres=-1024):
     return img_sitk > thres
+
 
 class Plan:
     def __init__(self, img_file_path, info_json_path, dose_dir):
@@ -29,7 +31,7 @@ class Plan:
 
     @property
     def isocentre_ijk(self):
-        return self.img.TransformPhysicalPointToIndex(self.isocentre) 
+        return self.img.TransformPhysicalPointToIndex(self.isocentre)
 
     @property
     def gantry_angle(self):
@@ -77,6 +79,4 @@ class Plan:
         self.beam_id = beam_id
         self.cp_idx = cp_idx
 
-        print('State set to {self.beam_id}, {self.cp_idx}')
-
-
+        print(f"State set to {self.beam_id}, {self.cp_idx}")

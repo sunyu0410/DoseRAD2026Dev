@@ -5,95 +5,139 @@ import json
 import SimpleITK as sitk
 
 
-def rotate_image_batched(
-    tensor_img,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
-    spacing,  # Can now be a torch.Tensor or list/tuple
-    origin,  # Can now be a torch.Tensor or list/tuple
-    isocentre,  # Can now be a torch.Tensor or list/tuple
-    degrees_list,  # Can now be a torch.Tensor of angles on GPU
-    axis="z",
-    bg_value=-1024,
-    pad_voxels=None,
+def make_grid(
+    tensor_img,  # Shape: (D, H, W) or (B, 1, D, H, W)
+    spacing,  # (x, y, z) spacing in mm
+    origin,  # (x, y, z) origin in mm
+    isocentre,  # (x, y, z) rotation center in mm
+    degrees_list,  # list or tensor of angles in degrees
+    axis="z",  # "x", "y", or "z"
+    bg_value=-1024.0,
 ):
     """
-    100% pure PyTorch GPU implementation. No NumPy operations.
-    Processes all control points concurrently on the GPU.
+    Rotates a 3D image using PyTorch matching SimpleITK's physical space logic.
+    Inputs for spacing, origin, and isocentre must be in (X, Y, Z) order.
     """
     dtype = tensor_img.dtype
+    device = tensor_img.device
 
-    # 1. Standardise tensor dimensions to 5D format: (1, 1, D, H, W)
+    # 1. Standardise tensor dimensions to 5D format: (B, 1, D, H, W)
     if tensor_img.dim() == 3:
         tensor_img = tensor_img.unsqueeze(0).unsqueeze(0)
     elif tensor_img.dim() == 4:
         tensor_img = tensor_img.unsqueeze(1)
 
     _, _, D, H, W = tensor_img.shape
-    device = tensor_img.device
 
-    # 2. Convert metadata inputs directly to PyTorch tensors on the same GPU
+    # PyTorch GridSample coordinates: X=Width, Y=Height, Z=Depth
     size_xyz = torch.tensor([W, H, D], dtype=dtype, device=device)
     spacing_xyz = torch.as_tensor(spacing, dtype=dtype, device=device)
     origin_xyz = torch.as_tensor(origin, dtype=dtype, device=device)
     iso_xyz = torch.as_tensor(isocentre, dtype=dtype, device=device)
     angles_deg = torch.as_tensor(degrees_list, dtype=dtype, device=device)
 
-    # 3. Calculate continuous voxel index on GPU
-    iso_voxel = (iso_xyz - origin_xyz) / spacing_xyz
+    num_batch = len(angles_deg)
 
-    # 4. Handle GPU padding shifts if requested
-    if pad_voxels is not None:
-        pad_xyz = torch.as_tensor(pad_voxels, dtype=dtype, device=device)
-        new_size_xyz = size_xyz + 2 * pad_xyz
-        iso_voxel = iso_voxel + pad_xyz
+    # 2. Protect against zero-division for dimensions of size 1
+    denom = size_xyz - 1.0
+    # denom = torch.where(denom == 0, torch.ones_like(denom), denom)
 
-        p_z, p_y, p_x = int(pad_voxels[0]), int(pad_voxels[1]), int(pad_voxels[2])
-        tensor_img = F.pad(
-            tensor_img, (p_x, p_x, p_y, p_y, p_z, p_z), mode="constant", value=bg_value
-        )
-        _, _, out_D, out_H, out_W = tensor_img.shape
-    else:
-        new_size_xyz = size_xyz
-        out_D, out_H, out_W = D, H, W
+    # 3. Calculate mapping factors between [-1, 1] and Millimeters
+    scale_mm = (denom * spacing_xyz) / 2.0
+    translation_mm = scale_mm + origin_xyz
 
-    # 5. Normalize isocentre to PyTorch coordinate space [-1, 1]
-    iso_pt = (2.0 * iso_voxel / (new_size_xyz - 1.0)) - 1.0
-    x_c, y_c, z_c = iso_pt[0], iso_pt[1], iso_pt[2]
+    # 4. Matrix: Normalized [-1, 1] to Physical Millimeters
+    M_norm_to_phys = (
+        torch.eye(4, dtype=dtype, device=device).unsqueeze(0).repeat(num_batch, 1, 1)
+    )
+    M_norm_to_phys[:, 0, 0] = scale_mm[0]
+    M_norm_to_phys[:, 1, 1] = scale_mm[1]
+    M_norm_to_phys[:, 2, 2] = scale_mm[2]
+    M_norm_to_phys[:, 0, 3] = translation_mm[0]
+    M_norm_to_phys[:, 1, 3] = translation_mm[1]
+    M_norm_to_phys[:, 2, 3] = translation_mm[2]
 
-    # 6. Compute trigonometry vectors in parallel for all 180 angles on GPU
-    rad = torch.deg2rad(-angles_deg)  # Flip degree to match your operational logic
+    # 5. Matrix: Physical Millimeters to Normalized [-1, 1]
+    M_phys_to_norm = (
+        torch.eye(4, dtype=dtype, device=device).unsqueeze(0).repeat(num_batch, 1, 1)
+    )
+    M_phys_to_norm[:, 0, 0] = 1.0 / scale_mm[0]
+    M_phys_to_norm[:, 1, 1] = 1.0 / scale_mm[1]
+    M_phys_to_norm[:, 2, 2] = 1.0 / scale_mm[2]
+    M_phys_to_norm[:, 0, 3] = -translation_mm[0] / scale_mm[0]
+    M_phys_to_norm[:, 1, 3] = -translation_mm[1] / scale_mm[1]
+    M_phys_to_norm[:, 2, 3] = -translation_mm[2] / scale_mm[2]
+
+    # 6. Matrix: Inverse Physical Rotation
+    # We use positive angles because grid_sample pulls from the source image
+    rad = torch.deg2rad(-angles_deg)
     cos_a = torch.cos(rad)
     sin_a = torch.sin(rad)
 
-    num_batch = len(degrees_list)
-    zeros = torch.zeros(num_batch, device=device)
-    ones = torch.ones(num_batch, device=device)
+    M_rotate_inv = (
+        torch.eye(4, dtype=dtype, device=device).unsqueeze(0).repeat(num_batch, 1, 1)
+    )
 
-    # 7. Construct the batched 3x4 affine matrices in parallel on GPU
+    Cx, Cy, Cz = iso_xyz[0], iso_xyz[1], iso_xyz[2]
+
     assert axis == "z"
-    row0 = torch.stack([cos_a, -sin_a, zeros, x_c * (1 - cos_a) + y_c * sin_a], dim=1)
-    row1 = torch.stack([sin_a, cos_a, zeros, -x_c * sin_a + y_c * (1 - cos_a)], dim=1)
-    row2 = torch.stack([zeros, zeros, ones, zeros], dim=1)
-    
-    # Shape: (180, 3, 4)
-    batch_matrices = torch.stack([row0, row1, row2], dim=1).to(dtype)
+    M_rotate_inv[:, 0, 0] = cos_a
+    M_rotate_inv[:, 0, 1] = -sin_a
+    M_rotate_inv[:, 1, 0] = sin_a
+    M_rotate_inv[:, 1, 1] = cos_a
+    M_rotate_inv[:, 0, 3] = Cx - (cos_a * Cx - sin_a * Cy)
+    M_rotate_inv[:, 1, 3] = Cy - (sin_a * Cx + cos_a * Cy)
 
-    # 8. Expand input image and apply the math-shift workaround
+    # 7. Compose the Final Transformation Matrix
+    # Order: [Phys -> Norm] * [Rotate] * [Norm -> Phys]
+    M_final = torch.bmm(M_phys_to_norm, torch.bmm(M_rotate_inv, M_norm_to_phys))
+
+    # Extract the 3x4 affine matrix required by affine_grid
+    batch_matrices = M_final[:, 0:3, 0:4]
+
+    # 9. Resample
+    grid = F.affine_grid(
+        batch_matrices, size=(num_batch, 1, D, H, W), align_corners=True
+    )
+
+    return grid
+
+
+def apply_grid(tensor_img, grid, degrees_list, bg_value=-1024.0):
+    num_batch = len(degrees_list)
+
+    if tensor_img.dim() == 3:
+        tensor_img = tensor_img.unsqueeze(0).unsqueeze(0)
+    elif tensor_img.dim() == 4:
+        tensor_img = tensor_img.unsqueeze(1)
+
     if tensor_img.size(0) != num_batch:
-        print(tensor_img.size(), num_batch)
         batched_img = tensor_img.expand(num_batch, -1, -1, -1, -1) - bg_value
     else:
         batched_img = tensor_img - bg_value
 
-    # 9. Execute grid interpolation entirely inside VRAM cores
-    grid = F.affine_grid(
-        batch_matrices, size=(num_batch, 1, out_D, out_H, out_W), align_corners=True
-    )
     rotated_tensor = F.grid_sample(
         batched_img, grid, mode="bilinear", padding_mode="zeros", align_corners=True
     )
 
-    # Restore background HU radiation values
     rotated_tensor = rotated_tensor + bg_value
+
+    return rotated_tensor.squeeze(1)
+
+
+def rotate_image_new(
+    tensor_img,  # Shape: (D, H, W) or (B, 1, D, H, W)
+    spacing,  # (x, y, z) spacing in mm
+    origin,  # (x, y, z) origin in mm
+    isocentre,  # (x, y, z) rotation center in mm
+    degrees_list,  # list or tensor of angles in degrees
+    axis="z",  # "x", "y", or "z"
+    bg_value=-1024.0,
+):
+    grid = make_grid(
+        tensor_img, spacing, origin, isocentre, degrees_list, axis, bg_value
+    )
+    rotated_tensor = apply_grid(tensor_img, grid, degrees_list, bg_value)
 
     return rotated_tensor.squeeze(1)
 
@@ -147,7 +191,7 @@ if __name__ == "__main__":
     # }
 
     isocentre = info["iso_center"]
-    degree = -info['beams'][3]['gantry_angle']
+    degree = -info["beams"][3]["gantry_angle"]
 
     img = sitk.ReadImage(r"ct.mha")
     img_ = sitk.GetImageFromArray(
@@ -170,56 +214,57 @@ if __name__ == "__main__":
             img.GetOrigin(),
             isocentre,
             [degree],
-            bg_value=0
+            bg_value=0,
         ).numpy()[0]
     )
     img_.CopyInformation(img)
     sitk.WriteImage(img_, "dose_rotated_30.mha")
 
-
-    source = info['beams'][3]['rays'][0]['ray_source']
-    target = info['beams'][3]['rays'][0]['ray_target']
+    source = info["beams"][3]["rays"][0]["ray_source"]
+    target = info["beams"][3]["rays"][0]["ray_target"]
 
     src_r = rotate_pt_z(source, isocentre, degree)
     tgt_r = rotate_pt_z(target, isocentre, degree)
 
-    print(f'Source: {source} -> {src_r}')
-    print(f'Target: {target} -> {tgt_r}')
+    print(f"Source: {source} -> {src_r}")
+    print(f"Target: {target} -> {tgt_r}")
 
     # Source: [483.87, -928.05, 33.99] -> tensor([  -16.1274, -1062.0244,    33.9900])
     # Target: [-14.413875853458421, -61.036056014982364, 33.99] -> tensor([-14.1468, -62.0264,  33.9900])
 
     # Get the beam path
     import numpy as np
-    src_r_ijk = img.TransformPhysicalPointToIndex(src_r.tolist()) # (234, -812, 93)
-    tgt_r_ijk = img.TransformPhysicalPointToIndex(tgt_r.tolist()) # (236, 188, 93)
+
+    src_r_ijk = img.TransformPhysicalPointToIndex(src_r.tolist())  # (234, -812, 93)
+    tgt_r_ijk = img.TransformPhysicalPointToIndex(tgt_r.tolist())  # (236, 188, 93)
 
     sx, sy, sz = img.GetSpacing()
     nx, ny, nz = img.GetSize()
-    z,y,x = np.mgrid[0:nz, 0:ny, 0:nx]
+    z, y, x = np.mgrid[0:nz, 0:ny, 0:nx]
 
     centre_x = (src_r_ijk[0] + tgt_r_ijk[0]) / 2
     centre_z = (src_r_ijk[2] + tgt_r_ijk[2]) / 2
 
-    dist = np.sqrt((x-centre_x)**2/sz**2 + (z-centre_z)**2/sx**2)
+    dist = np.sqrt((x - centre_x) ** 2 / sz**2 + (z - centre_z) ** 2 / sx**2)
     img_ = sitk.GetImageFromArray(dist)
     img_.CopyInformation(img)
-    sitk.WriteImage(img_, 'dist.nii.gz')
-    
+    sitk.WriteImage(img_, "dist.nii.gz")
+
     # TODO sigma_s and sigma_e: https://share.google/aimode/nG5QY6Cb1nWiXD3O8
     # sigma_s
     def cal_distance_z(r, sigma_s, alpha):
-        sigma_z = np.sqrt(sigma_s**2 + (alpha*z)**2)
-        return np.exp(-r**2/(2*sigma_z**2))
+        sigma_z = np.sqrt(sigma_s**2 + (alpha * z) ** 2)
+        return np.exp(-(r**2) / (2 * sigma_z**2))
 
     # sigma_e
     from scipy.special import erf
+
     def cal_fluence_z(z, r0, gamma, sigma_e):
         sigma_r = gamma * sigma_e
-        fluence = 0.5 * (1 - erf((z-r0)/np.sqrt(2)*sigma_r))
+        fluence = 0.5 * (1 - erf((z - r0) / np.sqrt(2) * sigma_r))
         return fluence
 
     def cal_stop_power(z, beta):
-        return np.exp(-z*beta)
+        return np.exp(-z * beta)
 
     # dose deposit (z) = fluence (z) * stop_power (z)
