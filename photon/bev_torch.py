@@ -2,7 +2,7 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 import cv2
-from photon.geometry import get_distance_slice_pt
+from geometry import get_distance_slice_pt
 
 
 def make_grid_5d(B, isocentre_idx, z_scales, ref_img):

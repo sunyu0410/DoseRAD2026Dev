@@ -7,10 +7,10 @@ import numpy as np
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from photon.plan import Plan
-from photon.rotate import rotate_image_new
-from photon.geometry import get_source_location_mm, MLC
-from photon.bev_torch import (
+from plan import Plan
+from rotate import rotate_image_new
+from geometry import get_source_location_mm, MLC
+from bev_torch import (
     make_grid_5d,
     get_bev_torch,
     mm2idx,
@@ -55,7 +55,7 @@ def get_bbox(arr, margin=5):
     results in np array as (zmin, ymin, xmin), (zmax, ymax, xmax)
     """
 
-    shape = arr.shape
+    shape = np.array(arr.shape)
     idx = np.array(np.where(arr > 0))
 
     # Safety check
@@ -88,7 +88,7 @@ class BeamData(Dataset):
         self.dose = self.load_doses()
         self.rotate_dose()
         self.img_rot = self.rotate_img()
-        # self.bev = self.cal_bev()
+        self.bev = self.cal_bev()
 
     def load_doses(self):
 
@@ -206,3 +206,18 @@ if __name__ == "__main__":
     img = sitk.GetImageFromArray(d.img_rot[23].float().numpy())
     img.CopyInformation(d.plan.img)
     sitk.WriteImage(img, "photon/ct_-134.nii.gz")
+
+    img = sitk.GetImageFromArray(d.bev[23].numpy())
+    img.CopyInformation(d.plan.img)
+    sitk.WriteImage(img, "photon/bev_-134.nii.gz")
+
+    mask = d.img_rot > -1024
+    bev = d.bev.masked_fill_(~mask, 0)
+    bev = bev.sum(0, dtype=torch.uint8)
+    (zmin, ymin, xmin), (zmax, ymax, xmax) = get_bbox(bev.numpy(), margin=5)
+
+    data = torch.stack([
+        self.img_rot[:3], self.bev[:3], mask[:3], self.dose[:3]
+    ], dim=0)[:,:,zmin:zmax, ymin:ymax, xmin:xmax].moveaxis(3,2)
+
+    torch.save(data.clone(), 'photon/data.pt') # clone() avoid saving background full tensors

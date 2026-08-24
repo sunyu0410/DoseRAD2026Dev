@@ -103,8 +103,8 @@ def make_grid(
     return grid
 
 
-def apply_grid(tensor_img, grid, degrees_list, bg_value=-1024.0):
-    num_batch = len(degrees_list)
+def apply_grid(tensor_img, grid, bg_value=-1024.0):
+    num_batch = grid.size(0)
 
     if tensor_img.dim() == 3:
         tensor_img = tensor_img.unsqueeze(0).unsqueeze(0)
@@ -137,7 +137,7 @@ def rotate_image_new(
     grid = make_grid(
         tensor_img, spacing, origin, isocentre, degrees_list, axis, bg_value
     )
-    rotated_tensor = apply_grid(tensor_img, grid, degrees_list, bg_value)
+    rotated_tensor = apply_grid(tensor_img, grid, bg_value)
 
     return rotated_tensor.squeeze(1)
 
@@ -161,110 +161,3 @@ def rotate_pt_z(pt, isocentre, angle):
 
     return torch.matmul(R, torch.tensor([x, y, z, 1])) + isocentre
 
-
-if __name__ == "__main__":
-    # wget https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/proton/training/1ABB006/dose/Dose_B3_R0_L1.mha
-    # wget https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/proton/training/1ABB006/image/ct.mha
-    # wget https://huggingface.co/datasets/LMUK-RADONC-PHYS-RES/DoseRAD2026/resolve/main/proton/training/1ABB006/1ABB006.json
-
-    info = json.load(open("1ABB006.json"))
-
-    # info = {
-    #   "iso_center": [-16.1283, -62.0295, 73.9938],
-    #   "beams": [
-    #     {
-    #       "beam_idx": 0,
-    #       "gantry_angle": 0.0,
-    #       "rays": [
-    #         {
-    #           "ray_idx": 0,
-    #           "ray_source": [-16.13, -1062.03, 33.99],
-    #           "ray_target": [-16.13, -62.03, 33.99],
-    #           "beamlets": [
-    #             {"beamlet_idx": 0, "energy": 45.5978},
-    #             {"beamlet_idx": 1, "energy": 126.1016}
-    #           ]
-    #         }
-    #       ]
-    #     }
-    #   ]
-    # }
-
-    isocentre = info["iso_center"]
-    degree = -info["beams"][3]["gantry_angle"]
-
-    img = sitk.ReadImage(r"ct.mha")
-    img_ = sitk.GetImageFromArray(
-        rotate_image_batched(
-            torch.tensor(sitk.GetArrayFromImage(img)),
-            img.GetSpacing(),
-            img.GetOrigin(),
-            isocentre,
-            [degree],
-        ).numpy()[0]
-    )
-    img_.CopyInformation(img)
-    sitk.WriteImage(img_, "ct_rotated_30.mha")
-
-    img = sitk.ReadImage(r"Dose_B3_R0_L1.mha")
-    img_ = sitk.GetImageFromArray(
-        rotate_image_batched(
-            torch.tensor(sitk.GetArrayFromImage(img)),
-            img.GetSpacing(),
-            img.GetOrigin(),
-            isocentre,
-            [degree],
-            bg_value=0,
-        ).numpy()[0]
-    )
-    img_.CopyInformation(img)
-    sitk.WriteImage(img_, "dose_rotated_30.mha")
-
-    source = info["beams"][3]["rays"][0]["ray_source"]
-    target = info["beams"][3]["rays"][0]["ray_target"]
-
-    src_r = rotate_pt_z(source, isocentre, degree)
-    tgt_r = rotate_pt_z(target, isocentre, degree)
-
-    print(f"Source: {source} -> {src_r}")
-    print(f"Target: {target} -> {tgt_r}")
-
-    # Source: [483.87, -928.05, 33.99] -> tensor([  -16.1274, -1062.0244,    33.9900])
-    # Target: [-14.413875853458421, -61.036056014982364, 33.99] -> tensor([-14.1468, -62.0264,  33.9900])
-
-    # Get the beam path
-    import numpy as np
-
-    src_r_ijk = img.TransformPhysicalPointToIndex(src_r.tolist())  # (234, -812, 93)
-    tgt_r_ijk = img.TransformPhysicalPointToIndex(tgt_r.tolist())  # (236, 188, 93)
-
-    sx, sy, sz = img.GetSpacing()
-    nx, ny, nz = img.GetSize()
-    z, y, x = np.mgrid[0:nz, 0:ny, 0:nx]
-
-    centre_x = (src_r_ijk[0] + tgt_r_ijk[0]) / 2
-    centre_z = (src_r_ijk[2] + tgt_r_ijk[2]) / 2
-
-    dist = np.sqrt((x - centre_x) ** 2 / sz**2 + (z - centre_z) ** 2 / sx**2)
-    img_ = sitk.GetImageFromArray(dist)
-    img_.CopyInformation(img)
-    sitk.WriteImage(img_, "dist.nii.gz")
-
-    # TODO sigma_s and sigma_e: https://share.google/aimode/nG5QY6Cb1nWiXD3O8
-    # sigma_s
-    def cal_distance_z(r, sigma_s, alpha):
-        sigma_z = np.sqrt(sigma_s**2 + (alpha * z) ** 2)
-        return np.exp(-(r**2) / (2 * sigma_z**2))
-
-    # sigma_e
-    from scipy.special import erf
-
-    def cal_fluence_z(z, r0, gamma, sigma_e):
-        sigma_r = gamma * sigma_e
-        fluence = 0.5 * (1 - erf((z - r0) / np.sqrt(2) * sigma_r))
-        return fluence
-
-    def cal_stop_power(z, beta):
-        return np.exp(-z * beta)
-
-    # dose deposit (z) = fluence (z) * stop_power (z)
