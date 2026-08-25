@@ -205,26 +205,26 @@ class BeamData(Dataset):
 
 
 if __name__ == "__main__":
-    pat_dir = "/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB006"
-    # pat_dir = 'photon/data/1ABB006'
+    pat_dir = "/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training/1ABB143"
+    # pat_dir = 'photon/data/1ABB143'
 
     plan = Plan(
         img_file_path=rf"{pat_dir}/image/ct.mha",
-        info_json_path=rf"{pat_dir}/1ABB006.json",
+        info_json_path=rf"{pat_dir}/1ABB143.json",
         dose_dir=rf"{pat_dir}/dose",
     )
     print(plan.beam_info)
 
     d = BeamData(plan)
 
-    img = sitk.GetImageFromArray(d.dose[23].float().numpy())
-    img.CopyInformation(d.plan.img)
-    sitk.WriteImage(img, "photon/d_-134.nii.gz")
+    # img = sitk.GetImageFromArray(d.dose[23].float().numpy())
+    # img.CopyInformation(d.plan.img)
+    # sitk.WriteImage(img, "photon/d_-134.nii.gz")
 
-    img = sitk.GetImageFromArray(d.img_rot[23].float().numpy())
-    img.CopyInformation(d.plan.img)
-    sitk.WriteImage(img, "photon/ct_-134.nii.gz")
+    # img = sitk.GetImageFromArray(d.img_rot[23].float().numpy())
+    # img.CopyInformation(d.plan.img)
+    # sitk.WriteImage(img, "photon/ct_-134.nii.gz")
 
-    img = sitk.GetImageFromArray(d.bev[23].numpy())
-    img.CopyInformation(d.plan.img)
-    sitk.WriteImage(img, "photon/bev_-134.nii.gz")
+    # img = sitk.GetImageFromArray(d.bev[23].numpy())
+    # img.CopyInformation(d.plan.img)
+    # sitk.WriteImage(img, "photon/bev_-134.nii.gz")

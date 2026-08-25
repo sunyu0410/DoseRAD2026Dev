@@ -10,8 +10,8 @@ import numpy as np
 model = BeamNet()
 loss = nn.MSELoss()  # Standard for continuous radiation dose matching
 smooth_loss = LaplacianSmoothness2DLoss()
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-1, weight_decay=1e-2)
+# optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-2, weight_decay=1e-3)
 
 
 data_dir = Path("/workspace/DoseRAD2026Dev/data/DoseRAD2026/photon/training")
