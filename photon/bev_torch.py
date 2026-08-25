@@ -14,8 +14,8 @@ def make_grid_5d(B, isocentre_idx, z_scales, ref_img):
     x_coords = torch.linspace(-1.0, 1.0, W)
     Y, X = torch.meshgrid(y_coords, x_coords, indexing="ij")
 
-    isocentre_grid = 2 * torch.tensor(isocentre_idx) / torch.tensor([nx, ny, nz]) - 1
-    x_c, y_c = isocentre_grid[0], isocentre_grid[2]  # Centred at the BEV origin
+    isocentre_grid = 2 * torch.tensor(isocentre_idx[::-1]) / torch.tensor([nx, ny, nz]) - 1
+    x_c, y_c = isocentre_grid[2], isocentre_grid[0]  # Centred at the BEV origin
 
     X_transformed = (X - x_c) / z_scales + x_c
     Y_transformed = (Y - y_c) / z_scales + y_c
