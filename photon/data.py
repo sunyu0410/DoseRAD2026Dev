@@ -183,7 +183,18 @@ class BeamData(Dataset):
         return self.n_cp
 
     def __getitem__(self, idx):
-        return self.doses[idx]
+        img = self.img_rot[idx]
+        bev = self.bev[idx]
+        dose = self.dose[idx]
+
+        mask = img > -1024
+        (zmin, ymin, xmin), (zmax, ymax, xmax) = get_bbox(bev.numpy(), margin=3)
+
+        data = torch.stack([
+            img, bev, mask, dose
+        ], dim=0)[:,zmin:zmax, ymin:ymax, xmin:xmax].moveaxis(2, 1)
+
+        return data
 
 
 if __name__ == "__main__":
@@ -210,14 +221,3 @@ if __name__ == "__main__":
     img = sitk.GetImageFromArray(d.bev[23].numpy())
     img.CopyInformation(d.plan.img)
     sitk.WriteImage(img, "photon/bev_-134.nii.gz")
-
-    mask = d.img_rot > -1024
-    bev = d.bev.masked_fill_(~mask, 0)
-    bev = bev.sum(0, dtype=torch.uint8)
-    (zmin, ymin, xmin), (zmax, ymax, xmax) = get_bbox(bev.numpy(), margin=5)
-
-    data = torch.stack([
-        self.img_rot[:3], self.bev[:3], mask[:3], self.dose[:3]
-    ], dim=0)[:,:,zmin:zmax, ymin:ymax, xmin:xmax].moveaxis(3,2)
-
-    torch.save(data.clone(), 'photon/data.pt') # clone() avoid saving background full tensors
