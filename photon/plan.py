@@ -23,7 +23,7 @@ class Plan:
 
         self.parse_json()
 
-        self.set_state(beam_id=0, cp_idx=0)
+        self.set_state(beam_id=0)
 
     @property
     def isocentre(self):
@@ -32,10 +32,6 @@ class Plan:
     @property
     def isocentre_ijk(self):
         return self.img.TransformPhysicalPointToIndex(self.isocentre)
-
-    @property
-    def gantry_angle(self):
-        return self.cp[self.beam_id][self.cp_idx]["ga"]
 
     def parse_json(self):
         # In [113]: beam_info[0]
@@ -74,9 +70,7 @@ class Plan:
         )
         self.n_beams = len(self.beam_info)
 
-    def set_state(self, beam_id, cp_idx):
-        assert cp_idx in self.cp[beam_id]
+    def set_state(self, beam_id,):
         self.beam_id = beam_id
-        self.cp_idx = cp_idx
 
-        print(f"State set to {self.beam_id}, {self.cp_idx}")
+        print(f"State set to {self.beam_id}")

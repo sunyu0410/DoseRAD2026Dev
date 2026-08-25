@@ -66,7 +66,7 @@ def get_bbox(arr, margin=5):
 
 
 class BeamData(Dataset):
-    def __init__(self, plan):
+    def __init__(self, plan, n_samples=None):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.plan = plan
         self.rot_input_tensor = (
@@ -85,55 +85,58 @@ class BeamData(Dataset):
             [self.cp_info[i]["ga"] for i in range(self.n_cp)]
         ).to(self.device)
 
+        self.ids = np.arange(self.n_cp)
+        if n_samples is not None:
+            self.ids = np.random.choice(self.ids, n_samples, replace=False)
+        self.ids = torch.tensor(self.ids)
+        self.angles = self.angles[self.ids]
+
+        self.img_rot = torch.zeros((len(self.ids),) + self.img.shape)
         self.dose = self.load_doses()
-        self.rotate_dose()
-        self.img_rot = self.rotate_img()
+        self.rotate_dose_img()
         self.bev = self.cal_bev()
 
     def load_doses(self):
 
         fl = [
             f"{self.plan.dose_dir}/Dose_B{self.plan.beam_id}_CP{i:03d}.mha"
-            for i in range(self.n_cp)
+            for i in self.ids.tolist()
         ]
         dose = read_dose_parallel(fl, num_threads=8)
         dose = torch.tensor(dose)
         return dose
 
-    def rotate_dose(self):
+    def rotate_dose_img(self):
 
-        for i in tqdm(range(6), desc="Rotating dose"):
-            self.rot_input_tensor[:] = self.dose[30 * i : (i + 1) * 30]
+        for i in tqdm(range(0, len(self.ids)//30+bool(len(self.ids)%30)), desc="Rotating dose & img"):
+            # Get the length of batch, it can be less than 30
+            angles = self.angles[i * 30 : (i + 1) * 30]
+            n = len(angles)
+
+            # Rotate the dose
+            self.rot_input_tensor[:n] = self.dose[30 * i : (i + 1) * 30]
             self.dose[30 * i : (i + 1) * 30] = rotate_image_new(
-                self.rot_input_tensor,  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+                self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
                 self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
-                -self.angles[
-                    i * 30 : (i + 1) * 30
-                ],  # Can now be a torch.Tensor of angles on GPU
+                -angles,  # Can now be a torch.Tensor of angles on GPU
                 axis="z",
                 bg_value=0.0,
             ).cpu()
 
-    def rotate_img(self):
-        img_rot = torch.zeros((180,) + self.img.shape)
-
-        for i in tqdm(range(6), desc="Rotating image"):
-            self.rot_input_tensor[:] = self.img.expand(30, -1, -1, -1)
-            img_rot[i * 30 : (i + 1) * 30] = rotate_image_new(
-                self.rot_input_tensor[:],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+            # Rotate the img
+            self.rot_input_tensor[:n] = self.img.expand(n, -1, -1, -1)
+            self.img_rot[30 * i : (i + 1) * 30] = rotate_image_new(
+                self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
                 self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
                 self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
-                -self.angles[
-                    i * 30 : (i + 1) * 30
-                ],  # Can now be a torch.Tensor of angles on GPU
+                -angles,  # Can now be a torch.Tensor of angles on GPU
                 axis="z",
-                bg_value=-1024.0,
+                bg_value=-1024,
             ).cpu()
 
-        return img_rot
 
     def cal_bev(self, n_batch=30):
 
@@ -145,9 +148,9 @@ class BeamData(Dataset):
             return z_scales
 
         def _cal_mlc_2d(self):
-            # Get the 2d bev at isocentre for all 180 control points
+            # Get the 2d bev at isocentre for each control point
             bev_iso_list = []
-            for i in range(180):
+            for i in self.ids.tolist():
                 mlc = MLC.get_mlc_segs_mm(
                     self.cp_info[i]["l"], self.cp_info[i]["r"], self.isocentre
                 )
@@ -173,14 +176,17 @@ class BeamData(Dataset):
 
         # Get the beam path by batch
         bevs = []
-        for i in tqdm(range(0, 180, n_batch), desc="Calulating BEV beam path"):
-            bevs.append(get_bev_torch(mlc_masks_2d[i : (i + n_batch)], grid_5d))
+
+        for i in tqdm(range(0, len(self.ids)//30+bool(len(self.ids)%30)), desc="Calulating BEV beam path"):
+            batch = mlc_masks_2d[i*30 : (i+1)*30]
+            n = len(batch)
+            bevs.append(get_bev_torch(batch, grid_5d[:n]))
         bevs = torch.cat(bevs, dim=0)
 
         return bevs
 
     def __len__(self):
-        return self.n_cp
+        return len(self.ids)
 
     def __getitem__(self, idx):
         img = self.img_rot[idx]
@@ -188,13 +194,14 @@ class BeamData(Dataset):
         dose = self.dose[idx]
 
         mask = img > -1024
+        bev = bev * mask
         (zmin, ymin, xmin), (zmax, ymax, xmax) = get_bbox(bev.numpy(), margin=3)
 
         data = torch.stack([
             img, bev, mask, dose
         ], dim=0)[:,zmin:zmax, ymin:ymax, xmin:xmax].moveaxis(2, 1)
 
-        return data
+        return data # [img, bev, mask, dose]
 
 
 if __name__ == "__main__":
