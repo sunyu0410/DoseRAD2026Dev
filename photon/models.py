@@ -8,19 +8,23 @@ class BeamNet(nn.Module):
         super().__init__()
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = smp.MAnet(
-            encoder_name="resnet34",        #
-            encoder_weights="imagenet",     # Leverage pre-trained features
-            in_channels=4,                  #
+            encoder_name="resnet34",  
+            encoder_weights=None,     
+            in_channels=4,            
             classes=1,                      # Outputs 1 slice of continuous 3D Dose radiation map
             ).to(self.device)
 
-    def forward(self, img, bev):
-        mask = img > -1024
+    def forward(self, img, bev, mask):
+        img = img.moveaxis(1,0).unsqueeze(1)
+        bev = bev.moveaxis(1,0).unsqueeze(1)
+        mask = mask.moveaxis(1,0).unsqueeze(1)
+
+        img_norm = img/1000+1.024
 
         depth = torch.cumsum(mask, dim=0)
-        wed = torch.cumsum(mask*(img/1000+1.024), dim=0)
+        wed = torch.cumsum(mask*img_norm, dim=0)
 
-        x = torch.cat((img/1000+1.024, bev, depth, wed), dim=1).to(self.device)
+        x = torch.cat((img_norm, bev, depth, wed), dim=1).to(self.device)
 
         h, w = x.shape[2], x.shape[3]
         pad_h = (32 - h % 32) % 32
@@ -29,8 +33,11 @@ class BeamNet(nn.Module):
         if pad_h > 0 or pad_w > 0:
             x = F.pad(x, (0, pad_w, 0, pad_h), mode='constant')
 
-        return self.model(x)[:,:,:h,:w]
+        # Reverse the operations
+        out = self.model(x)[:,:,:h,:w]
+        out = out.squeeze(1).moveaxis(0,1)
         
+        return out
 
 
 class LaplacianSmoothness2DLoss(nn.Module):

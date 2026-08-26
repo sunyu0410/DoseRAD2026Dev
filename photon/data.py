@@ -59,8 +59,8 @@ def get_bbox(arr, margin=5):
     idx = np.array(np.where(arr > 0))
 
     # Safety check
-    min_idx = np.clip(idx.min(1) - margin, 0, shape - 1)
-    max_idx = np.clip(idx.max(1) + margin, 0, shape - 1)
+    min_idx = np.clip(idx.min(1) - margin, 0, shape)
+    max_idx = np.clip(idx.max(1) + margin, 0, shape)
 
     return np.stack([min_idx, max_idx])
 

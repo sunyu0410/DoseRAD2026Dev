@@ -1,5 +1,0 @@
-numpy
-fastapi
-uvicorn
-SimpleITK
-torch

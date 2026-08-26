@@ -61,3 +61,8 @@ for pt in pt_tr:
             optimizer.step()
             optimizer.zero_grad()
             print(l.item())
+
+torch.save(model.state_dict(), 'model_weights.pth')
+
+model2 = BeamNet()
+model2.load_state_dict(torch.load('model_weights.pth'))
