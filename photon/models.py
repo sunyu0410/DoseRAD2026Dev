@@ -62,10 +62,10 @@ class LaplacianSmoothness2DLoss(nn.Module):
 
         # 2. Compute Second-Order Spatial Differences (Laplacian approximation)
         # Height (Y-axis) curvature: (y+2) - 2*(y+1) + (y)
-        lap_y = torch.abs(pred[:, :, 2:, :] - 2 * pred[:, :, 1:-1, :] + pred[:, :, :-2, :]).mean()
+        lap_y = torch.abs(pred[:, 2:, :] - 2 * pred[:, 1:-1, :] + pred[:, :-2, :]).mean()
 
         # Width (X-axis) curvature: (x+2) - 2*(x+1) + (x)
-        lap_x = torch.abs(pred[:, :, :, 2:] - 2 * pred[:, :, :, 1:-1] + pred[:, :, :, :-2]).mean()
+        lap_x = torch.abs(pred[:, :, 2:] - 2 * pred[:, :, 1:-1] + pred[:, :, :-2]).mean()
 
         # Combined 2D Laplacian curvature penalty
         total_lap = lap_y + lap_x

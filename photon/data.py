@@ -195,13 +195,12 @@ class BeamData(Dataset):
 
         mask = img > -1024
         bev = bev * mask
-        (zmin, ymin, xmin), (zmax, ymax, xmax) = get_bbox(bev.numpy(), margin=3)
+        bounds = get_bbox(bev.numpy(), margin=3)
+        loc = tuple([slice(*i) for i in zip(*bounds.tolist())])  # torch requires tuple
 
-        data = torch.stack([
-            img, bev, mask, dose
-        ], dim=0)[:,zmin:zmax, ymin:ymax, xmin:xmax].moveaxis(2, 1)
-
-        return data # [img, bev, mask, dose]
+        return (
+            img[loc], bev[loc], mask[loc], loc, dose[loc]
+        )
 
 
 if __name__ == "__main__":

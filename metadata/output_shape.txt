@@ -1,0 +1,98 @@
+In [34]: input_img = d.img_sitk
+
+In [35]: input_img
+Out[35]: <SimpleITK.SimpleITK.Image; proxy of <Swig Object of type 'itk::simple::Image *' at 0x78da98470370> >
+
+In [36]:         dose_slices = []
+    ...:         for slice_index in range(stack_size):
+    ...:             print(f"Generating dummy dose map {slice_index} for output file index {output_index + 1}")
+    ...:             # In a real algorithm this is where inference would run.
+    ...:             dose_np = simulate_dose(input_image, slot.get(slice_index), device)
+    ...:             dose_slice = sitk.GetImageFromArray(dose_np)
+    ...:             dose_slice.CopyInformation(input_image)
+    ...:             dose_slices.append(dose_slice)
+    ...: 
+Generating dummy dose map 0 for output file index 1
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+Cell In[36], line 5
+      3 print(f"Generating dummy dose map {slice_index} for output file index {output_index + 1}")
+      4 # In a real algorithm this is where inference would run.
+----> 5 dose_np = simulate_dose(input_image, slot.get(slice_index), device)
+      6 dose_slice = sitk.GetImageFromArray(dose_np)
+      7 dose_slice.CopyInformation(input_image)
+
+Cell In[2], line 4, in simulate_dose(input_image, output_info, device)
+      2 """Build one dummy dose slice and zero out everything below its cutoff."""
+      3 if DOSE_SIMULATION == "gaussian":
+----> 4     shape = tuple(reversed(input_image.GetSize()))
+      5     dose = make_gaussian_dose(shape, sigma=20, device=device, dtype=torch.float32)
+      6     # Copy: the tensor is cached, and on CPU .numpy() shares its buffer,
+      7     # so the in-place cutoff below would otherwise corrupt the cache.
+
+AttributeError: 'Tensor' object has no attribute 'GetSize'
+
+In [37]: input_image = d.img_sitk
+
+In [38]:         dose_slices = []
+    ...:         for slice_index in range(stack_size):
+    ...:             print(f"Generating dummy dose map {slice_index} for output file index {output_index + 1}")
+    ...:             # In a real algorithm this is where inference would run.
+    ...:             dose_np = simulate_dose(input_image, slot.get(slice_index), device)
+    ...:             dose_slice = sitk.GetImageFromArray(dose_np)
+    ...:             dose_slice.CopyInformation(input_image)
+    ...:             dose_slices.append(dose_slice)
+    ...: 
+Generating dummy dose map 0 for output file index 1
+Generating dummy dose map 1 for output file index 1
+Generating dummy dose map 2 for output file index 1
+Generating dummy dose map 3 for output file index 1
+Generating dummy dose map 4 for output file index 1
+Generating dummy dose map 5 for output file index 1
+Generating dummy dose map 6 for output file index 1
+Generating dummy dose map 7 for output file index 1
+Generating dummy dose map 8 for output file index 1
+Generating dummy dose map 9 for output file index 1
+Generating dummy dose map 10 for output file index 1
+Generating dummy dose map 11 for output file index 1
+Generating dummy dose map 12 for output file index 1
+Generating dummy dose map 13 for output file index 1
+Generating dummy dose map 14 for output file index 1
+Generating dummy dose map 15 for output file index 1
+Generating dummy dose map 16 for output file index 1
+Generating dummy dose map 17 for output file index 1
+Generating dummy dose map 18 for output file index 1
+Generating dummy dose map 19 for output file index 1
+Generating dummy dose map 20 for output file index 1
+Generating dummy dose map 21 for output file index 1
+Generating dummy dose map 22 for output file index 1
+Generating dummy dose map 23 for output file index 1
+Generating dummy dose map 24 for output file index 1
+Generating dummy dose map 25 for output file index 1
+Generating dummy dose map 26 for output file index 1
+Generating dummy dose map 27 for output file index 1
+Generating dummy dose map 28 for output file index 1
+Generating dummy dose map 29 for output file index 1
+Generating dummy dose map 30 for output file index 1
+Generating dummy dose map 31 for output file index 1
+Generating dummy dose map 32 for output file index 1
+Generating dummy dose map 33 for output file index 1
+Generating dummy dose map 34 for output file index 1
+Generating dummy dose map 35 for output file index 1
+Generating dummy dose map 36 for output file index 1
+Generating dummy dose map 37 for output file index 1
+Generating dummy dose map 38 for output file index 1
+Generating dummy dose map 39 for output file index 1
+
+In [39]: stacked = sitk.JoinSeries(dose_slices)
+
+In [40]: stacked.GetSize()
+Out[40]: (249, 246, 246, 40)
+
+In [41]: print(stacked.GetSize())
+(249, 246, 246, 40)
+
+In [42]: sitk.WriteImage(stacked, 'test.mha', useCompression=False)
+
+In [43]: ls -lah *.mha
+-rw-rw-rw- 1 root root 2.3G Aug 26 04:08 test.mha
