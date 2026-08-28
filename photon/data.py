@@ -6,6 +6,7 @@ import SimpleITK as sitk
 import numpy as np
 from torch.utils.data import Dataset
 from tqdm import tqdm
+import torch.nn.functional as F
 
 from plan import Plan
 from rotate import rotate_image_new
@@ -66,15 +67,9 @@ def get_bbox(arr, margin=5):
 
 
 class BeamData(Dataset):
-    def __init__(self, plan, n_samples=None):
+    def __init__(self, plan, n_samples=None, pad_voxels=None):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.plan = plan
-        self.rot_input_tensor = (
-            torch.randn((30,) + self.plan.img.GetSize()[::-1])
-            .to(torch.float32)
-            .to(self.device)
-        )
-        self.img = torch.tensor(plan.img_arr).to(torch.float16).to(self.device)
 
         # Beam specific information
         self.isocentre = self.plan.isocentre
@@ -85,16 +80,63 @@ class BeamData(Dataset):
             [self.cp_info[i]["ga"] for i in range(self.n_cp)]
         ).to(self.device)
 
+        # Sampling
         self.ids = np.arange(self.n_cp)
         if n_samples is not None:
             self.ids = np.random.choice(self.ids, n_samples, replace=False)
         self.ids = torch.tensor(self.ids)
         self.angles = self.angles[self.ids]
 
-        self.img_rot = torch.zeros((len(self.ids),) + self.img.shape)
+        # Get sitk info
+        self.padded_img_sitk = self.plan.img
+        self.spacing = self.padded_img_sitk.GetSpacing()
+        self.origin = self.padded_img_sitk.GetOrigin()
+
+        # Load data
+        self.img = torch.tensor(plan.img_arr)
         self.dose = self.load_doses()
+
+        # Set padding
+        if pad_voxels is not None:
+            if isinstance(pad_voxels, int):
+                pad_x = pad_y = pad_z = pad_voxels
+            else:
+                pad_x, pad_y, pad_z = pad_voxels
+            self.pad_voxels = (pad_x, pad_y, pad_z)
+
+            to_pad = (pad_x, pad_x, pad_y, pad_y, pad_z, pad_z)
+
+            # Pad image and dose
+            self.img = F.pad(self.img, to_pad, value=-1024)
+            self.dose = F.pad(self.dose, to_pad, value=0)
+
+            # Update the sitk and metadata
+            self.padded_img_sitk = sitk.GetImageFromArray(self.img.numpy())
+            self.padded_img_sitk.SetSpacing(self.plan.img.GetSpacing())
+            self.padded_img_sitk.SetDirection(self.plan.img.GetDirection())
+            new_origin = (
+                self.origin[0] - pad_x * self.spacing[0],
+                self.origin[1] - pad_y * self.spacing[1],
+                self.origin[2] - pad_z * self.spacing[2]
+            )
+            self.padded_img_sitk.SetOrigin(new_origin)
+            self.origin = new_origin
+
+            print('Padded using', to_pad)
+
+            
+        # Rotation universal input
+        self.rot_input_tensor = (
+            torch.randn((30,) + self.padded_img_sitk.GetSize()[::-1])
+            .to(torch.float32)
+            .to(self.device)
+        )
+
+
+        self.img_rot = torch.zeros((len(self.ids),) + self.img.shape)
         self.rotate_dose_img()
         self.bev = self.cal_bev()
+        self.depth, self.wed, self.bbox_loc = self.cal_depth_wed()
 
     def load_doses(self):
 
@@ -117,8 +159,8 @@ class BeamData(Dataset):
             self.rot_input_tensor[:n] = self.dose[30 * i : (i + 1) * 30]
             self.dose[30 * i : (i + 1) * 30] = rotate_image_new(
                 self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
-                self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
-                self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
+                self.spacing,  # Can now be a torch.Tensor or list/tuple
+                self.origin,  # Can now be a torch.Tensor or list/tuple
                 self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
                 -angles,  # Can now be a torch.Tensor of angles on GPU
                 axis="z",
@@ -129,8 +171,8 @@ class BeamData(Dataset):
             self.rot_input_tensor[:n] = self.img.expand(n, -1, -1, -1)
             self.img_rot[30 * i : (i + 1) * 30] = rotate_image_new(
                 self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
-                self.plan.img.GetSpacing(),  # Can now be a torch.Tensor or list/tuple
-                self.plan.img.GetOrigin(),  # Can now be a torch.Tensor or list/tuple
+                self.spacing,  # Can now be a torch.Tensor or list/tuple
+                self.origin,  # Can now be a torch.Tensor or list/tuple
                 self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
                 -angles,  # Can now be a torch.Tensor of angles on GPU
                 axis="z",
@@ -142,7 +184,7 @@ class BeamData(Dataset):
 
         def _cal_scales(self):
             src_mm = get_source_location_mm(self.isocentre, 0, self.sad)
-            z_scales = torch.tensor(cal_scales(self.plan.img, self.isocentre, src_mm))[
+            z_scales = torch.tensor(cal_scales(self.padded_img_sitk, self.isocentre, src_mm))[
                 ..., None, None
             ]
             return z_scales
@@ -154,7 +196,7 @@ class BeamData(Dataset):
                 mlc = MLC.get_mlc_segs_mm(
                     self.cp_info[i]["l"], self.cp_info[i]["r"], self.isocentre
                 )
-                bev_iso = draw_iso_mlc(self.plan.img, mlc)  # (nx, nz) -> (246, 249)
+                bev_iso = draw_iso_mlc(self.padded_img_sitk, mlc)  # (nx, nz) -> (246, 249)
                 bev_iso_list.append(bev_iso)
             bev_iso_list = np.stack(bev_iso_list, axis=0)
             mlc_masks_2d = torch.tensor(bev_iso_list).to(torch.float32)
@@ -164,11 +206,11 @@ class BeamData(Dataset):
         z_scales = _cal_scales(self)
         mlc_masks_2d = _cal_mlc_2d(self)
 
-        isocentre_idx = mm2idx(self.plan.img, [self.isocentre])[0]
+        isocentre_idx = mm2idx(self.padded_img_sitk, [self.isocentre])[0]
 
         # Set the batch number (# of images to process) and get the grid
         # The grid can be reused for each beam
-        grid_5d = make_grid_5d(n_batch, isocentre_idx, z_scales, self.plan.img).to(
+        grid_5d = make_grid_5d(n_batch, isocentre_idx, z_scales, self.padded_img_sitk).to(
             self.device
         )
 
@@ -185,21 +227,63 @@ class BeamData(Dataset):
 
         return bevs
 
+    def cal_depth_wed(self):
+        mask = self.img_rot > -1024
+        bounds = get_bbox(mask.sum(0, dtype=torch.uint8).numpy(), margin=3)
+        loc = tuple([slice(*i) for i in zip(*bounds.tolist())])  # torch requires tuple
+
+        wed_box = torch.cumsum(mask[:, *loc]*(self.img_rot[:, *loc]+1024/1000), dim=2)
+        wed = torch.zeros_like(self.img_rot)
+        wed[:, *loc] = wed_box
+
+        depth = torch.cumsum(mask, dim=2, dtype=torch.int16)
+
+        # for i in tqdm(range(0, len(self.ids)//30+bool(len(self.ids)%30)), desc="Rotating depth & wed"):
+        #     # Get the length of batch, it can be less than 30
+        #     angles = self.angles[i * 30 : (i + 1) * 30]
+        #     n = len(angles)
+
+        #     # Rotate the depth
+        #     self.rot_input_tensor[:n] = depth[30 * i : (i + 1) * 30]
+        #     depth[30 * i : (i + 1) * 30] = rotate_image_new(
+        #         self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+        #         self.spacing,  # Can now be a torch.Tensor or list/tuple
+        #         self.origin,  # Can now be a torch.Tensor or list/tuple
+        #         self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
+        #         angles,  # Can now be a torch.Tensor of angles on GPU
+        #         axis="z",
+        #         bg_value=0.0,
+        #     ).cpu()
+
+        #     # Rotate the wed
+        #     self.rot_input_tensor[:n] = wed[30 * i : (i + 1) * 30]
+        #     wed[30 * i : (i + 1) * 30] = rotate_image_new(
+        #         self.rot_input_tensor[:n],  # Shape: (D, H, W) or (1, 1, D, H, W) on GPU
+        #         self.spacing,  # Can now be a torch.Tensor or list/tuple
+        #         self.origin,  # Can now be a torch.Tensor or list/tuple
+        #         self.plan.isocentre,  # Can now be a torch.Tensor or list/tuple
+        #         angles,  # Can now be a torch.Tensor of angles on GPU
+        #         axis="z",
+        #         bg_value=0.0,
+        #     ).cpu()
+
+        return depth, wed, loc
+
     def __len__(self):
         return len(self.ids)
 
     def __getitem__(self, idx):
         img = self.img_rot[idx]
         bev = self.bev[idx]
-        dose = self.dose[idx]
-
         mask = img > -1024
-        bev = bev * mask
-        bounds = get_bbox(bev.numpy(), margin=3)
-        loc = tuple([slice(*i) for i in zip(*bounds.tolist())])  # torch requires tuple
+        dose = self.dose[idx]
+        depth = self.depth[idx]
+        wed = self.wed[idx]
+
+        loc = self.bbox_loc
 
         return (
-            img[loc], bev[loc], mask[loc], loc, dose[loc]
+            img[loc], bev[loc], mask[loc], loc, dose[loc], depth[loc], wed[loc]
         )
 
 
@@ -214,16 +298,17 @@ if __name__ == "__main__":
     )
     print(plan.beam_info)
 
-    d = BeamData(plan)
+    # d = BeamData(plan)
+    d = BeamData(plan, pad_voxels=(0,30,0))
 
-    # img = sitk.GetImageFromArray(d.dose[23].float().numpy())
-    # img.CopyInformation(d.plan.img)
-    # sitk.WriteImage(img, "photon/d_-134.nii.gz")
+    img = sitk.GetImageFromArray(d.dose[23].float().numpy())
+    img.CopyInformation(d.padded_img_sitk)
+    sitk.WriteImage(img, "photon/d_-134.nii.gz")
 
-    # img = sitk.GetImageFromArray(d.img_rot[23].float().numpy())
-    # img.CopyInformation(d.plan.img)
-    # sitk.WriteImage(img, "photon/ct_-134.nii.gz")
+    img = sitk.GetImageFromArray(d.img_rot[23].float().numpy())
+    img.CopyInformation(d.padded_img_sitk)
+    sitk.WriteImage(img, "photon/ct_-134.nii.gz")
 
-    # img = sitk.GetImageFromArray(d.bev[23].numpy())
-    # img.CopyInformation(d.plan.img)
-    # sitk.WriteImage(img, "photon/bev_-134.nii.gz")
+    img = sitk.GetImageFromArray(d.bev[23].numpy())
+    img.CopyInformation(d.padded_img_sitk)
+    sitk.WriteImage(img, "photon/bev_-134.nii.gz")

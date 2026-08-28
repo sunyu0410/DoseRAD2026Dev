@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "imageio[pillow]>=2.37.4",
     "ipython>=9.16.1",
+    "itk>=5.4.7",
     "jupyter>=1.1.1",
     "matplotlib>=3.11.1",
     "monai>=1.6.0",
