@@ -53,19 +53,19 @@ class LaplacianSmoothness2DLoss(nn.Module):
         self.base_loss = nn.L1Loss() # Sharp absolute error baseline
         self.lambda_smooth = lambda_smooth
 
-    def forward(self, pred, target):
+    def forward(self, pred, target, mask):
         """
         pred, target shape: [Batch, Channels, Height, Width] (e.g., [B, 1, 250, 250])
         """
         # 1. Compute standard structural regression loss
-        main_loss = self.base_loss(pred, target)
+        main_loss = self.base_loss(pred[mask], target[mask])
 
         # 2. Compute Second-Order Spatial Differences (Laplacian approximation)
         # Height (Y-axis) curvature: (y+2) - 2*(y+1) + (y)
-        lap_y = torch.abs(pred[:, 2:, :] - 2 * pred[:, 1:-1, :] + pred[:, :-2, :]).mean()
+        lap_y = torch.abs(pred[:, 2:, :] - 2 * pred[:, 1:-1, :] + pred[:, :-2, :])[mask].mean()
 
         # Width (X-axis) curvature: (x+2) - 2*(x+1) + (x)
-        lap_x = torch.abs(pred[:, :, 2:] - 2 * pred[:, :, 1:-1] + pred[:, :, :-2]).mean()
+        lap_x = torch.abs(pred[:, :, 2:] - 2 * pred[:, :, 1:-1] + pred[:, :, :-2])[mask].mean()
 
         # Combined 2D Laplacian curvature penalty
         total_lap = lap_y + lap_x
