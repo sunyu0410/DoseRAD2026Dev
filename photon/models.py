@@ -9,7 +9,9 @@ class BeamNet(nn.Module):
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = smp.MAnet(
             encoder_name="resnet34",  
-            encoder_weights=None,     
+            encoder_weights='imagenet',     
+            decoder_channels=(256, 128, 128, 64, 16),
+            decoder_use_norm=False,
             in_channels=4,            
             classes=1,                      # Outputs 1 slice of continuous 3D Dose radiation map
             ).to(self.device)
@@ -53,19 +55,19 @@ class LaplacianSmoothness2DLoss(nn.Module):
         self.base_loss = nn.L1Loss() # Sharp absolute error baseline
         self.lambda_smooth = lambda_smooth
 
-    def forward(self, pred, target, mask):
+    def forward(self, pred, target):
         """
         pred, target shape: [Batch, Channels, Height, Width] (e.g., [B, 1, 250, 250])
         """
         # 1. Compute standard structural regression loss
-        main_loss = self.base_loss(pred[mask], target[mask])
+        main_loss = self.base_loss(pred, target)
 
         # 2. Compute Second-Order Spatial Differences (Laplacian approximation)
         # Height (Y-axis) curvature: (y+2) - 2*(y+1) + (y)
-        lap_y = torch.abs(pred[:, 2:, :] - 2 * pred[:, 1:-1, :] + pred[:, :-2, :])[mask].mean()
+        lap_y = torch.abs(pred[:, 2:, :] - 2 * pred[:, 1:-1, :] + pred[:, :-2, :]).mean()
 
         # Width (X-axis) curvature: (x+2) - 2*(x+1) + (x)
-        lap_x = torch.abs(pred[:, :, 2:] - 2 * pred[:, :, 1:-1] + pred[:, :, :-2])[mask].mean()
+        lap_x = torch.abs(pred[:, :, 2:] - 2 * pred[:, :, 1:-1] + pred[:, :, :-2]).mean()
 
         # Combined 2D Laplacian curvature penalty
         total_lap = lap_y + lap_x

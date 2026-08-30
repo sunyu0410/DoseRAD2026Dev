@@ -30,50 +30,58 @@ l2 = nn.MSELoss()
 
 n = -1
 
-# Round 1
-optimizers = [
-    optim.Adam(getattr(model, key).parameters(), lr=0.001) for key in ['bev3', 'ring3', 'ring2', 'ring1']
-]
+# # Round 1
+# optimizers = [
+#     optim.Adam(getattr(model, key).parameters(), lr=0.001) for key in ['bev3', 'ring3', 'ring2', 'ring1']
+# ]
 
-for pt_id, pt in enumerate(pt_tr):
-    gc.collect()
-    torch.cuda.empty_cache()
-    n += 1
-    pat_dir = data_dir / pt
-    plan = Plan(
-        img_file_path=rf"{pat_dir}/image/ct.mha",
-        info_json_path=rf"{pat_dir}/{pt}.json",
-        dose_dir=rf"{pat_dir}/dose",
-    )
-    d = BeamData(plan, 5)
-    for img, bev, mask, loc, dose in d:
-        proc = MLPProcessor(img, bev, dose)
+# for pt_id, pt in enumerate(pt_tr):
+#     gc.collect()
+#     torch.cuda.empty_cache()
+#     n += 1
+#     pat_dir = data_dir / pt
+#     plan = Plan(
+#         img_file_path=rf"{pat_dir}/image/ct.mha",
+#         info_json_path=rf"{pat_dir}/{pt}.json",
+#         dose_dir=rf"{pat_dir}/dose",
+#     )
+#     d = BeamData(plan, 5)
+#     for img, bev, mask, loc, dose in d:
+#         proc = MLPProcessor(img, bev, dose)
 
-        epochs = 50
-        pbar = tqdm(range(epochs))
-        for epoch in pbar:
-            # Forward pass
-            xs, ys = proc.get_xy()
+#         epochs = 50
+#         pbar = tqdm(range(epochs))
+#         for epoch in pbar:
+#             # Forward pass
+#             xs, ys = proc.get_xy()
 
-            preds = model(xs)
-            weights = [3,1,1,1]
+#             preds = model(xs)
+#             weights = [3,1,1,1]
 
-            ls = [l1(pred, y)*w for (pred,y,w) in zip(preds,ys,weights)]
-            for o, l in zip(optimizers, ls):
-                o.zero_grad()
-                l.backward()
-                o.step()
+#             ls = [l1(pred, y)*w for (pred,y,w) in zip(preds,ys,weights)]
+#             for o, l in zip(optimizers, ls):
+#                 o.zero_grad()
+#                 l.backward()
+#                 o.step()
 
 
-            pbar.set_postfix_str(f'Epoch [{epoch+1}/{epochs}], Loss: {torch.stack(ls).tolist()}')
+#             pbar.set_postfix_str(f'Epoch [{epoch+1}/{epochs}], Loss: {torch.stack(ls).tolist()}')
 
-    # Save weights
-    print(n, n%10, n%10==0)
-    if n%10 == 0:
-        torch.save(model.bev3.state_dict(), f'mlp_weights/{n}-bev3-{pt_id}.pth')
-        torch.save(model.ring3.state_dict(), f'mlp_weights/{n}-ring3-{pt_id}.pth')
-        torch.save(model.ring2.state_dict(), f'mlp_weights/{n}-ring2-{pt_id}.pth')
-        torch.save(model.ring1.state_dict(), f'mlp_weights/{n}-ring1-{pt_id}.pth')
+#     # Save weights
+#     print(n, n%10, n%10==0)
+#     if n%2 == 0:
+#         torch.save(model.bev3.state_dict(), f'mlp_weights/{n}-bev3-{pt_id}.pth')
+#         torch.save(model.ring3.state_dict(), f'mlp_weights/{n}-ring3-{pt_id}.pth')
+#         torch.save(model.ring2.state_dict(), f'mlp_weights/{n}-ring2-{pt_id}.pth')
+#         torch.save(model.ring1.state_dict(), f'mlp_weights/{n}-ring1-{pt_id}.pth')
+
+
+n=50
+model.bev3.load_state_dict(torch.load('mlp_weights/50-bev3-0.pth'))
+model.ring3.load_state_dict(torch.load('mlp_weights/50-ring3-0.pth'))
+model.ring2.load_state_dict(torch.load('mlp_weights/50-ring2-0.pth'))
+model.ring1.load_state_dict(torch.load('mlp_weights/50-ring1-0.pth'))
+
 
 # lr 1e-4
 optimizers = [
@@ -113,7 +121,7 @@ for pt_id, pt in enumerate(pt_tr):
             pbar.set_postfix_str(f'Epoch [{epoch+1}/{epochs}], Loss: {torch.stack(ls).tolist()}')
 
     # Save weights
-    if n%10 == 0:
+    if n%2 == 0:
         torch.save(model.bev3.state_dict(), f'mlp_weights/{n}-bev3-{pt_id}.pth')
         torch.save(model.ring3.state_dict(), f'mlp_weights/{n}-ring3-{pt_id}.pth')
         torch.save(model.ring2.state_dict(), f'mlp_weights/{n}-ring2-{pt_id}.pth')
@@ -157,7 +165,7 @@ for pt_id, pt in enumerate(pt_tr):
             pbar.set_postfix_str(f'Epoch [{epoch+1}/{epochs}], Loss: {torch.stack(ls).tolist()}')
 
     # Save weights
-    if n%10 == 0:
+    if n%2 == 0:
         torch.save(model.bev3.state_dict(), f'mlp_weights/{n}-bev3-{pt_id}.pth')
         torch.save(model.ring3.state_dict(), f'mlp_weights/{n}-ring3-{pt_id}.pth')
         torch.save(model.ring2.state_dict(), f'mlp_weights/{n}-ring2-{pt_id}.pth')

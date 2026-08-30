@@ -6,6 +6,7 @@ from scipy.ndimage import distance_transform_edt
 import torch.nn as nn
 import torch.optim as optim
 from tqdm import tqdm
+from pathlib import Path
 
 class MLPProcessor():
     def __init__(self, ct, bev, dose):
@@ -85,6 +86,7 @@ class MLPProcessor():
             return x
         
     def get_xy(self):
+        '''For TRAINING ONLY. The ring dose is from GT for training'''
         xs = []
         ys = []
 
@@ -100,6 +102,35 @@ class MLPProcessor():
             xs.append(x)
             ys.append(y)
         return xs, ys
+
+    def inference(self, model):
+        '''The ring dose is from model prediction'''
+
+        preds = {}
+
+        # bev3
+        x = self.prepare_ring_data('bev3')
+        preds['bev3'] = model.bev3(x)
+
+        # ring3
+        inner_dose = torch.zeros_like(self.dose)
+        inner_dose[self.rings['bev3']!=0] = preds['bev3']
+        x = self.prepare_ring_data('ring3', inner_dose=inner_dose)
+        preds['ring3'] = model.ring3(x)
+
+        # ring2
+        inner_dose = torch.zeros_like(self.dose)
+        inner_dose[self.rings['ring3']!=0] = preds['ring3']
+        x = self.prepare_ring_data('ring2', inner_dose=inner_dose)
+        preds['ring2'] = model.ring3(x)
+
+        # ring1
+        inner_dose = torch.zeros_like(self.dose)
+        inner_dose[self.rings['ring2']!=0] = preds['ring2']
+        x = self.prepare_ring_data('ring1', inner_dose=inner_dose)
+        preds['ring1'] = model.ring3(x)
+
+        return preds['bev3'], preds['ring3'], preds['ring2'], preds['ring1']
         
     
     def get_full_map(self, preds):
@@ -143,6 +174,54 @@ class DoseModel():
         preds = [model(x) for model, x in zip(models, xs)]
 
         return preds
+
+    def load_weight(self, weight_dir):
+        weight_dir = Path(weight_dir)
+
+        self.bev3.load_state_dict(torch.load(weight_dir / 'weight_bev3.pth'))
+        self.ring3.load_state_dict(torch.load(weight_dir / 'weight_ring3.pth'))
+        self.ring2.load_state_dict(torch.load(weight_dir / 'weight_ring2.pth'))
+        self.ring1.load_state_dict(torch.load(weight_dir / 'weight_ring1.pth'))
+
+        print('Weights loaded')
+
+import numpy as np
+from scipy.ndimage import gaussian_filter
+
+def apply_3d_glow(volume, mask, sigma=2.0, glow_intensity=0.5):
+    """
+    Applies a glowing effect around a 3D mask within a volume.
+
+    Parameters:
+    -----------
+    volume : ndarray
+        The original 3D image volume (normalized between 0.0 and 1.0).
+    mask : ndarray (boolean or binary)
+        The 3D binary mask where the signal is located.
+    sigma : float or sequence of scalars
+        Standard deviation for Gaussian kernel (controls glow width/radius).
+    glow_intensity : float
+        Multiplier for the glow brightness.
+    """
+    # 1. Ensure inputs are floats for mathematical operations
+    volume_float = volume.astype(np.float32)
+    mask_float = mask.astype(np.float32)
+
+    # 2. Generate the 3D glow map by blurring the mask
+    # This creates a smooth intensity falloff extending outside the mask boundaries
+    glow_map = gaussian_filter(volume_float, sigma=sigma)
+
+    # 3. Suppress the glow *inside* the mask so it only appears around the edges
+    # (Optional: remove this line if you want the mask interior to brighten up too)
+    glow_map[mask > 0] = 0.0
+
+    # 4. Blend the glow map into the original low-intensity background
+    # Using additive blending to mimic physical light emission
+    glowing_volume = volume_float + (glow_map * glow_intensity)
+
+    # 5. Clip values to maintain valid intensity ranges (e.g., 0.0 to 1.0)
+    return np.clip(glowing_volume, 0.0, 1.0)
+
             
 if __name__ == "__main__":
     input_tensor = torch.load('data.pt')
