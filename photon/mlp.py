@@ -46,10 +46,10 @@ class MLPProcessor():
         ring3 = bev2 - bev3
 
         return dict(
-            bev3 = bev3,
-            ring3 = ring3,
-            ring2 = ring2,
-            ring1 = ring1
+            bev3 = bev3.bool(),
+            ring3 = ring3.bool(),
+            ring2 = ring2.bool(),
+            ring1 = ring1.bool()
         )
     
     @staticmethod
@@ -102,44 +102,45 @@ class MLPProcessor():
             xs.append(x)
             ys.append(y)
         return xs, ys
+        
 
     def inference(self, model):
         '''The ring dose is from model prediction'''
 
         preds = {}
+        inner_dose = torch.zeros_like(self.dose).float() # Accumalates the pred
 
         # bev3
         x = self.prepare_ring_data('bev3')
         preds['bev3'] = model.bev3(x)
+        inner_dose[self.rings['bev3']!=0] = preds['bev3'].ravel().cpu()
 
         # ring3
-        inner_dose = torch.zeros_like(self.dose)
-        inner_dose[self.rings['bev3']!=0] = preds['bev3']
         x = self.prepare_ring_data('ring3', inner_dose=inner_dose)
         preds['ring3'] = model.ring3(x)
+        inner_dose[self.rings['ring3']!=0] = preds['ring3'].ravel().cpu()
 
         # ring2
-        inner_dose = torch.zeros_like(self.dose)
-        inner_dose[self.rings['ring3']!=0] = preds['ring3']
         x = self.prepare_ring_data('ring2', inner_dose=inner_dose)
-        preds['ring2'] = model.ring3(x)
+        preds['ring2'] = model.ring2(x)
+        inner_dose[self.rings['ring2']!=0] = preds['ring2'].ravel().cpu()
 
         # ring1
-        inner_dose = torch.zeros_like(self.dose)
-        inner_dose[self.rings['ring2']!=0] = preds['ring2']
         x = self.prepare_ring_data('ring1', inner_dose=inner_dose)
-        preds['ring1'] = model.ring3(x)
+        preds['ring1'] = model.ring1(x)
+        inner_dose[self.rings['ring1']!=0] = preds['ring1'].ravel().cpu()
 
-        return preds['bev3'], preds['ring3'], preds['ring2'], preds['ring1']
+        return inner_dose
         
     
     def get_full_map(self, preds):
 
-        pred_maps = [torch.zeros_like(self.dose) for i in range(4)]
-
+        # Get the four pred maps
+        pred_maps = [torch.zeros_like(self.dose).float() for i in range(4)]
         for pred_map, key, pred in zip(pred_maps, self.keys, preds):
             pred_map[self.rings[key]!=0] = pred.ravel()
 
+        # Return the sum of them
         return torch.stack(pred_maps, dim=0).sum(0)
 
 
@@ -188,7 +189,7 @@ class DoseModel():
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
-def apply_3d_glow(volume, mask, sigma=2.0, glow_intensity=0.5):
+def apply_3d_glow(volume, mask, sigma=2.0, glow_intensity=0.5, radius=None):
     """
     Applies a glowing effect around a 3D mask within a volume.
 
@@ -203,24 +204,28 @@ def apply_3d_glow(volume, mask, sigma=2.0, glow_intensity=0.5):
     glow_intensity : float
         Multiplier for the glow brightness.
     """
-    # 1. Ensure inputs are floats for mathematical operations
-    volume_float = volume.astype(np.float32)
-    mask_float = mask.astype(np.float32)
-
-    # 2. Generate the 3D glow map by blurring the mask
+    # Ensure inputs are floats for mathematical operations
+    volume_float = volume.numpy().astype(np.float32)
+    mask_float = ndimage.binary_erosion(mask.numpy(), structure=None, iterations=2).astype(np.float32)
+    
+    # Generate the 3D glow map by blurring the mask
     # This creates a smooth intensity falloff extending outside the mask boundaries
-    glow_map = gaussian_filter(volume_float, sigma=sigma)
+    glow_map = gaussian_filter(volume_float, sigma=sigma, radius=radius)
 
-    # 3. Suppress the glow *inside* the mask so it only appears around the edges
+    # Suppress the glow *inside* the mask so it only appears around the edges
     # (Optional: remove this line if you want the mask interior to brighten up too)
     glow_map[mask > 0] = 0.0
 
-    # 4. Blend the glow map into the original low-intensity background
-    # Using additive blending to mimic physical light emission
-    glowing_volume = volume_float + (glow_map * glow_intensity)
+    # Clip values to maintain valid intensity ranges (e.g., 0.0 to 1.0)
+    return torch.tensor(volume_float + glow_map * glow_intensity)
 
-    # 5. Clip values to maintain valid intensity ranges (e.g., 0.0 to 1.0)
-    return np.clip(glowing_volume, 0.0, 1.0)
+def add_glow(pred, bev):
+    '''pred, bev: in 3D'''
+    pred[bev==0] = 0
+    out = apply_3d_glow(pred, bev, sigma=3, glow_intensity=0.19)
+    out = apply_3d_glow(out, bev, sigma=17, glow_intensity=0.10)
+
+    return out
 
             
 if __name__ == "__main__":
