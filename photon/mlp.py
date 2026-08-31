@@ -206,7 +206,6 @@ def apply_3d_glow(volume, mask, sigma=2.0, glow_intensity=0.5, radius=None):
     """
     # Ensure inputs are floats for mathematical operations
     volume_float = volume.numpy().astype(np.float32)
-    mask_float = ndimage.binary_erosion(mask.numpy(), structure=None, iterations=2).astype(np.float32)
     
     # Generate the 3D glow map by blurring the mask
     # This creates a smooth intensity falloff extending outside the mask boundaries

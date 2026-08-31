@@ -3,6 +3,35 @@ from data import BeamData, Plan
 import numpy as np
 from pathlib import Path
 import torch
+from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor
+
+
+def infer_parallel(d, num_threads=8):
+    n_cp = len(d)
+
+    preds = {}
+
+    def infer(idx):
+        img, bev, mask, loc, dose = d[idx]
+        with torch.inference_mode():
+            proc = MLPProcessor(img, bev, dose)
+            pred = proc.inference(model)
+            pred = torch.clip(add_glow(pred, bev), min=0)
+        preds[idx] = pred.detach().cpu()
+
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        list(
+            tqdm(
+                executor.map(infer, range(n_cp)),
+                total=n_cp,
+                desc="Inferencing",
+            )
+        )
+        
+
+    return preds
+
 
 model = DoseModel()
 model.load_weight('photon/test_weights')
@@ -26,16 +55,11 @@ plan = Plan(
     info_json_path=rf"{pat_dir}/{pt}.json",
     dose_dir=rf"{pat_dir}/dose",
 )
-d = BeamData(plan, 10)
+d = BeamData(plan, 180)
 
 import time
 a = time.time()
-with torch.inference_mode():
-    for img, bev, mask, loc, dose in d:
-        print(1)
-        proc = MLPProcessor(img, bev, dose)
-        pred = proc.inference(model).clip(min=0)
-        pred = add_glow(pred, bev)
+infer_parallel(d)
 b = time.time()
 print(b-a)
 
