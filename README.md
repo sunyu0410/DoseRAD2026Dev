@@ -87,6 +87,7 @@ This is to inspect the scatter plot while pointing out the actual location on th
 
 ![](src/viewer.png)
 3. MLC calculator based on the leaf position and project to all slices in an sitk image.
+
 4. Perspective transform. See `photon-ct-3d` branch `bev/persp/perspective_numpy.ipynb`.
 
 ## What's lacking
