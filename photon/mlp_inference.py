@@ -45,12 +45,15 @@ def update(model, n):
     fnames = list(weight_dir.glob(f'{n}-*'))
     fnames.sort()
 
+    if len(fnames) < 4: return False
+
     model.bev3.load_state_dict(torch.load(fnames[0]))
     model.ring1.load_state_dict(torch.load(fnames[1]))
     model.ring2.load_state_dict(torch.load(fnames[2]))
     model.ring3.load_state_dict(torch.load(fnames[3]))
 
     print('Weights updated')
+    return True
 
 
 np.random.seed(1234)
@@ -74,14 +77,17 @@ for pt in pt_vl:
     )
     d = BeamData(plan, 180)
 
-    for n in range(0, 123, 2):
+    for n in range(50, 123, 2):
 
-        update(model, n)
+        if n!=96: continue
+
+        success = update(model, n)
+        if not success: continue
         preds, ys = infer_parallel(d)
 
-        for i in range(180):
+        for i in range(30):
             l1 = loss(preds[i], ys[i])
-            top = ys[i]>(ys[i].max()*0.9)
+            top = ys[i]>(ys[i].max()*0.1)
             rel = preds[i][top]/ys[i][top]
 
             row = dict(
@@ -95,6 +101,6 @@ for pt in pt_vl:
                 rel_mean = rel.mean().item()
             )
 
-            json.dump(row, open(f'photon/val_result/{pt}-{n}.json', 'w'))
+            json.dump(row, open(f'photon/96/{pt}-{n}.json', 'w'))
 
         
