@@ -12,6 +12,10 @@ Given the CT and beam geometry, predict the dose. There are two imaging modaliti
 *   My devepopment code: [https://github.com/sunyu0410/DoseRAD2026Dev/tree/photon\_ct](https://github.com/sunyu0410/DoseRAD2026Dev/tree/photon_ct)
 *   Submission code: [https://github.com/sunyu0410/example-photon-ct](https://github.com/sunyu0410/example-photon-ct)
 
+[Winner's method](src/winner.pdf) is based on [Xieo et. al.'s work](src/xiao.pdf)
+* https://github.com/LMUK-RADONC-PHYS-RES/DL-segment-dose-calculation
+* BEV based
+
 ## On Docker Submission
 The basic unit for submission is an **algorithm.**
 *   Each algorithm is linked with a Docker image.
